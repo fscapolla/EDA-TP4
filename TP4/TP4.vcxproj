@@ -122,7 +122,6 @@
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Simulation.cpp" />
-    <ClCompile Include="Tiempo.cpp" />
     <ClCompile Include="Worm.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -132,7 +131,6 @@
     <ClInclude Include="Graph.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Simulation.h" />
-    <ClInclude Include="Tiempo.h" />
     <ClInclude Include="Worm.h" />
   </ItemGroup>
   <ItemGroup>
