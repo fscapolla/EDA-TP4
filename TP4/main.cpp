@@ -59,11 +59,13 @@ int main(int argc, char *argv[])
 					simPtr->grapher->test(400, 400, i, 'W');
 					*/
 					/* descomentar para ver test jump */
-					/*if (i >= 10) {
+					if (i >= 10) {
 						i = 0;
+						res = 0;
+						break;
 					}
 					simPtr->grapher->test(400, 400, i, 'J');
-					*/
+					
 					al_flip_display();
 					i++;
 				}

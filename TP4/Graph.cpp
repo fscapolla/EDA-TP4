@@ -29,7 +29,7 @@ Graph::~Graph()
 {
 	if (display)
 		al_destroy_display(display);
-	/*if (background)
+	if (background)
 		al_destroy_bitmap(background);
 	for(int i=0; i < WALKINGFRAMES; i++) {
 		if (walkingFrames[i]) {
@@ -41,7 +41,6 @@ Graph::~Graph()
 			al_destroy_bitmap(jumpingFrames[i]);
 		}
 	}
-	*/
 }
 
 void Graph::update(Worm ** wormPtr, int wormNum)

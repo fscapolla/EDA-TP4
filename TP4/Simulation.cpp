@@ -19,6 +19,7 @@ Simulation::Simulation()		//Constructor de Simulation.
 
 Simulation::~Simulation()	//Destructor
 {
+	delete this->grapher;
 }
 
 bool Simulation::initSim(int width, int height)	//Inicializa a los worms y al objeto gráfico.
