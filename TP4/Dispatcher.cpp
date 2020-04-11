@@ -12,7 +12,7 @@ Dispatcher::~Dispatcher()
 }
 
 
-
+/*
 
 
 void Dispatcher::dispatchEvent(Evento evento, Simulation *simPtr)
@@ -64,3 +64,5 @@ void dispatch(Event ev, int wormCount, Worm * wArray[], Grapher * grapher)
 		break;
 	}
 }
+
+*/

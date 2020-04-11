@@ -14,42 +14,65 @@ int main(int argc, char *argv[])
 {
 	//Se crean los objetos para manejar eventos.
 	bool res = true;
+
 	Simulation *simPtr = new (nothrow) Simulation();
-	EventGen * generator= new (nothrow) EventGen();
-	Dispatcher *dispatcher = new (nothrow) Dispatcher();
+	if (!(simPtr->initSim(X_DISPLAY, Y_DISPLAY)))
+	{
+		cout << "No se pudo asignar memoria." << endl;
+		res = false;
+	}
+	// Dispatcher *dispatcher = new (nothrow) Dispatcher();
+	EventGen* generator = new (nothrow) EventGen();
+	res = generator->Init();
+	
 	srand(time(NULL));
 
 	//Se verifica que los objetos anteriores se hayan podido crear. 
-	if ((simPtr==nullptr) || (generator==nullptr) || (dispatcher==nullptr))
+	if ((simPtr==nullptr) || (generator==nullptr))
 	{
 		cout << "No se pudo asignar memoria."<<endl;
 		res = false;
 	}
 
 	//Se generan los dos objetos Worms que controlará el jugador y la parte gráfica.
-	if (!(simPtr->initSim(X_DISPLAY, Y_DISPLAY)))
-	{
-		cout << "No se pudo asignar memoria." << endl;
-		res = false;
-	}
+
 	
-	simPtr->startSim();	//Incializa a los worms y le otorga a cada uno sus teclas.
+	// simPtr->startSim();	//Incializa a los worms y le otorga a cada uno sus teclas.
 
 
 	//Suponiendo que no hubo errores de inicialización, comienza el juego.
 	if (res)
 	{
+		int i = 0;
 		while (!(generator->quitEvent()))	//Si el evento no es de finalización de juego, éste continúa
 		{
 			if (generator->newEvent())	//Revisa si hay eventos para atender.
 			{
-				dispatcher->dispatchEvent(generator->nextEvent(), simPtr);	//Procede según el tipo de evento recibido
+				// dispatcher->dispatchEvent(generator->nextEvent(), simPtr);	//Procede según el tipo de evento recibido
+
+				if (generator->getEvent() == ALLEGRO_EVENT_TIMER) {
+					
+					/* descomentar para ver test walk */
+					/*if (i >= 15) {
+						i = 0;
+					}
+					simPtr->grapher->test(400, 400, i, 'W');
+					*/
+					/* descomentar para ver test jump */
+					/*if (i >= 10) {
+						i = 0;
+					}
+					simPtr->grapher->test(400, 400, i, 'J');
+					*/
+					al_flip_display();
+					i++;
+				}
 			}
 		}
 	}
 
 	//Se libera la memoria dinámica.
 	delete generator;
-	delete dispatcher;
+	// delete dispatcher;
 	delete simPtr;
 }

@@ -32,18 +32,20 @@ bool Simulation::initSim(int width, int height)	//Inicializa a los worms y al ob
 	}
 
 	grapher = new(nothrow) Graph(width, height);
+	grapher->init();
 	if (grapher == nullptr)
 		res = false;
 	if (grapher->getError())
 		res = false;
 
+	return res;
 }
 
 
 //Setters
 void Simulation::setWormNum(int wormNum_)
 {
-	wormNum=wormNum_;
+	wormNum = wormNum_;
 }
 
 void Simulation::setWidth(int width_)
@@ -53,7 +55,7 @@ void Simulation::setWidth(int width_)
 
 void Simulation::setHeigth(int heigth_)
 {
-	heigth=heigth_:
+	heigth = heigth_;
 }
 
 
