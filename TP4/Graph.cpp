@@ -22,7 +22,7 @@ Graph::~Graph()
 {
 }
 
-void Graph::update(Worm ** wormPtr, int wormNum)
+void Graph::updateGrapher(Worm ** wormPtr, int wormNum)
 {
 }
 

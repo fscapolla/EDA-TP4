@@ -122,6 +122,7 @@
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Simulation.cpp" />
+    <ClCompile Include="random.cpp" />
     <ClCompile Include="Worm.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -129,6 +130,7 @@
     <ClInclude Include="EventGen.h" />
     <ClInclude Include="Evento.h" />
     <ClInclude Include="Graph.h" />
+    <ClInclude Include="random.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Simulation.h" />
     <ClInclude Include="Worm.h" />

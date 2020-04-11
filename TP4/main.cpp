@@ -1,12 +1,8 @@
 #include <iostream>
 #include "EventGen.h"
 #include "Simulation.h"
-#include "Graph.h"
 #include "Dispatcher.h"
-#include "Worm.h"
 #include <ctime>
-#include <cstdlib>
-
 
 using namespace std;
 
@@ -33,7 +29,7 @@ int main(int argc, char *argv[])
 		res = false;
 	}
 	
-	simPtr->startSim();	//Incializa a los worms y le otorga a cada uno sus teclas.
+	simPtr->assignKeys();	//Se asigna las teclas a cada worm.
 
 
 	//Suponiendo que no hubo errores de inicialización, comienza el juego.

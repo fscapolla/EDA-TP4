@@ -14,7 +14,8 @@ public:
 	Graph(int width, int height);
 	~Graph();
 
-	void update(Worm **wormPtr, int wormNum);	//Actualiza el display.
+	void updateGrapher(Worm **wormPtr, int wormNum);	//Actualiza el display.
+
 
 	//Getters
 	bool getError(void);

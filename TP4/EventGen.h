@@ -15,13 +15,13 @@ public:
 
 	//Getters
 	ALLEGRO_EVENT_QUEUE* getQueue(void);
-	Evento getEvent(void);
+	Evento * getEvent(void);
 
 
 
 
 private:
-	Evento evento;
+	Evento *evento;
 	ALLEGRO_EVENT_QUEUE * eventQueue;
 	ALLEGRO_TIMER * timer;
 };

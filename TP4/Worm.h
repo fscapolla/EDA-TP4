@@ -1,5 +1,7 @@
 #pragma once
 #include "Evento.h"
+#include "random.h"
+#include <cmath>
 
 #define SPEED 4.5
 #define G 0.24
@@ -12,6 +14,7 @@
 #define LEFT_EDGE	680
 #define RIGHT_EDGE	1175
 #define FLOOR		616
+#define IDLEFRAMES 8
 #define MOVINGFRAMES 14
 #define JUMPINGFRAMES 9
 #define ONESTEP 9
@@ -33,9 +36,18 @@ public:
 	void increaseWalkFrameCounter(void);
 	void increaseJumpFrameCounter(void);
 	void moveWorm(void);	//Mueve al worm 9 píxeles en alguna de las 2 direcciones posibles.
+	void moveWormAir(void);	//Mueve al worm durante el salto.
 	void turn_around(void);	//Da la vuelta al worm para que quede mirando en la dirección opuesta
 	//Agregar funciones startJumping, isJumping, &C.
-	void updateWorm(Evento evento);	//Actualiza el evento de Worm.
+	void updateWorm(Evento *evento);	//Actualiza el evento de Worm.
+
+	void setWormKeys(int jumpKey_, int rightKey_, int leftKey_);
+
+	void moveWorm(int keyCode);
+
+	void stopWorm(void);
+
+	void refresh_worm(void);
 
 	//Getters
 	double getX(void);
@@ -65,10 +77,12 @@ public:
 	void setJumpFrameCounter(int jumpFrame);
 
 private:	//Escribo todas las variables que se me ocurren pueden resultar útiles. Después vemos cuáles usamos.
-	bool isMoving, isJumping;
+	bool isWalking, isJumping;
 	int jumpKey;
 	int leftKey;
 	int rightKey;
+	bool isRightKeyPressed;
+	bool isLeftKeyPressed;
 	dir direction;
 	unsigned int jumpDuration;
 	double x, y;

@@ -15,48 +15,30 @@ Dispatcher::~Dispatcher()
 
 
 
-void Dispatcher::dispatchEvent(Evento evento, Simulation *simPtr)
+void Dispatcher::dispatchEvent(Evento * evento, Simulation *simPtr)
 {
-	event_type = evento.getType();
+	int eventType = evento->getType();
 	switch (eventType)
 	{
-	case KEYDOWN:KEYUP:
-	for (int i = 0; i < wormNum; i++)
-	{
-		wormPtr[i]->updateWorm(event_type);
-	}
+	case ALLEGRO_EVENT_KEY_DOWN:
+		for (int i = 0; i < simPtr->getWormNum(); i++)
+		{
+			simPtr->wormPtr[i]->updateWorm(evento);
+		}
 	break;
 
-	case TIMER:
-		for (int i = 0; i < wormNum; i++)
+	case ALLEGRO_EVENT_KEY_UP:
+		for (int i = 0; i < simPtr->getWormNum; i++)
 		{
-			wormPtr[i]->updateWorm(event_type);
-			grapher->updateGrapher(wormPtr, wormNum);
-		}
-
-	default:
-		break;
-	}
-}
-
-
-void dispatch(Event ev, int wormCount, Worm * wArray[], Grapher * grapher)
-{
-	switch (ev.get_event_type())
-	{
-	case POSSIBLE_WORM_MOVE:
-	case POSSIBLE_WORM_STOP:
-		for (int i = 0; i < wormCount; i++)		//Itera todos los worms
-		{
-			wormPtr[i]->update(ev);				//Actualiza propiedades de cada Worm
+			simPtr->wormPtr[i]->stopWorm();
 		}
 		break;
 
-	case REFRESH:
-		for (int i = 0; i < wormCount; i++)		//Itera todos los worms
+	case ALLEGRO_EVENT_TIMER:
+		for (int i = 0; i < simPtr->getWormNum(); i++)
 		{
-			wormPtr[i]->update(ev);				//increment frameCount of worm.
-			grapher->update(wArray, wormCount);	//Actualiza el display con la informacion de cada Worm
+			simPtr->wormPtr[i]->updateWorm(evento);
+			simPtr->grapher->updateGrapher(simPtr->wormPtr, simPtr->getWormNum());
 		}
 		break;
 

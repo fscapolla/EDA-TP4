@@ -46,7 +46,8 @@ ALLEGRO_EVENT_QUEUE * EventGen::getQueue(void)
 	return eventQueue;
 }
 
-Evento EventGen::getEvent(void)
+Evento * EventGen::getEvent(void)
 {
 	return evento;
 }
+
