@@ -11,6 +11,10 @@ Worm::Worm()	//Se inicializa el worm en reposo y mirando a la derecha por defect
 	y = FLOOR;
 	walkFrameCounter = 0;
 	jumpFrameCounter = 0;
+	preWalkFrameCounter = 0;
+	preJumpFrameCounter = 0;
+	frameCounter = 0;
+	cycleCounter = 0;
 	direction = right;
 	rightKey = NULL;
 	leftKey = NULL;
@@ -53,7 +57,7 @@ void Worm::moveWorm(void)
 	}
 }
 
-void Worm::moveWormAir(void)
+bool Worm::moveWormAir(void)
 {
 	if (direction == right)
 	{
@@ -73,7 +77,12 @@ void Worm::moveWormAir(void)
 	}
 	
 	y = FLOOR - speed*sin(angle)*jumpFrameCounter + (g / 2)*pow(jumpFrameCounter, 2);
-	if (y > FLOOR) { y = FLOOR; }
+	if (y > FLOOR) 
+	{ 
+		y = FLOOR; 
+		return true;
+	}
+	else return false;
 }
 
 void Worm::turn_around(void)
@@ -81,29 +90,8 @@ void Worm::turn_around(void)
 
 }
 
-void Worm::updateWorm(Evento *evento)	//Según el evento que llegó y el evento actual, llama a la función correcta
-{
-	int type = evento->getType;
-	int keyCode = evento->getKeycode;
 
-	switch (type)
-	{
-	case rightKeyDown:leftKeyDown:jumpKeyDown:
-	moveWorm(keyCode);
-	break;
 
-	case moveKeyUp:jumpKeyUp:
-	stopWorm();
-	break;
-
-	case newFrame:
-		refresh_worm();
-		break;
-
-	default:
-		break;
-	}
-}
 
 void Worm::setWormKeys(int jumpKey_, int rightKey_, int leftKey_)
 {
@@ -112,30 +100,83 @@ void Worm::setWormKeys(int jumpKey_, int rightKey_, int leftKey_)
 	leftKey = leftKey_;
 }
 
-void Worm::moveWorm(int keyCode)		//Analiza el estado actual del worm y procede acorde.
+
+
+void Worm::updateWorm(int keyCode_)		//Analiza el estado actual del worm y procede acorde.
 {
-	if (currentState==idle)				//Si el worm está quieto, comienza a moverse o a saltar.
+	switch (currentState)
 	{
-		if (keyCode == jumpKey)
+	case idle:
+		if (keyCode_ == jumpKeyUp)
 		{
-			currentState = begin_jumping;
+			currentState = jumping;
 			jumpFrameCounter++;
 		}
-		if (keyCode == rightKey)
+		else if (keyCode_ = rightKey || keyCode_ == leftKey)
 		{
-			currentState = begin_moving;
-
-
+			currentState = moving;
+			direction = ((keyCode_ == rightKey) ? right : left);
+			walkFrameCounter = 0;
 		}
+		break;
+
+	case moving:
+		break;
+
+	case jumping:
+		break;
+
+	case landing:
+		break;
+	default:
+		break;
 	}
 }
 
-void Worm::stopWorm(void)
-{
-}
+	void Worm::stopWorm(void)
+	{
+		switch (currentState)
+		{
+		case moving:
+			if (preWalkFrameCounter < WAITINGFRAMES)	//Si no pasaron los 100 ms se interpreta como que el usuario quiere dar vuelta al worm.
+			{
+				direction = ((direction == right) ? left : right);
 
-void Worm::refresh_worm(void)
+			}
+
+		default:
+			break;
+		}
+	}
+
+
+	void Worm::refresh_worm(void)		//Se encarga de actualizar los contadores de los worms.
 {
+		switch (currentState)
+		{
+		case moving:
+			if (preWalkFrameCounter < WAITINGFRAMES)	//Hay una espera de 100 ms hasta que comienzan los ciclos de movimiento.
+				preWalkFrameCounter++;
+			else walkFrameCounter++;
+			if (walkFrameCounter == MOVINGFRAMES)		//una vez que pasan los primeros 15 ciclos vuelve a el contador a 5 ciclos (No hace la espera de nuevo).
+			{
+				moveWorm();									//Se mueve al worm 9 píxeles.
+				walkFrameCounter = WAITINGFRAMES-5;
+				cycleCounter++;
+			}
+			if (cycleCounter>= RESETCYCLE)		//Una vez que se movió los 27 píxeles, comienza todo desde cero.
+			{
+				preWalkFrameCounter = 0;
+				walkFrameCounter = 0;
+				cycleCounter = 0;
+			}
+			break;
+		
+		case jumping:
+						//Tiene cuatro partes, una de espera, otra de salto, una de aterrizaje, una que vuelve a lo normal.
+		default:
+			break;
+		}
 }
 
 

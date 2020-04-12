@@ -1,6 +1,7 @@
 #pragma once
 #include <allegro5/allegro.h>
 #include "Worm.h"
+#include <allegro5/keyboard.h>
 #define BACKGROUND "Scenario.png"
 #define WALKINGFRAMES 15
 #define JUMPINGFRAMES 10

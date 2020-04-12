@@ -14,10 +14,11 @@
 #define LEFT_EDGE	680
 #define RIGHT_EDGE	1175
 #define FLOOR		616
-#define IDLEFRAMES 8
+#define WAITINGFRAMES 8
 #define MOVINGFRAMES 14
 #define JUMPINGFRAMES 9
-#define ONESTEP 9
+#define ONESTEP		9
+#define RESETCYCLE 3
 
 typedef enum {left,right} dir;
 typedef enum { begin_moving, idle, moving, Stop_moving, begin_jumping, jumping, landing } wormStates;
@@ -36,17 +37,11 @@ public:
 	void increaseWalkFrameCounter(void);
 	void increaseJumpFrameCounter(void);
 	void moveWorm(void);	//Mueve al worm 9 píxeles en alguna de las 2 direcciones posibles.
-	void moveWormAir(void);	//Mueve al worm durante el salto.
+	bool moveWormAir(void);	//Mueve al worm durante el salto.
 	void turn_around(void);	//Da la vuelta al worm para que quede mirando en la dirección opuesta
-	//Agregar funciones startJumping, isJumping, &C.
-	void updateWorm(Evento *evento);	//Actualiza el evento de Worm.
-
 	void setWormKeys(int jumpKey_, int rightKey_, int leftKey_);
-
-	void moveWorm(int keyCode);
-
+	void updateWorm(int keyCode_);
 	void stopWorm(void);
-
 	void refresh_worm(void);
 
 	//Getters
@@ -92,5 +87,9 @@ private:	//Escribo todas las variables que se me ocurren pueden resultar útiles.
 	wormStates currentState;
 	int walkFrameCounter;
 	int jumpFrameCounter;
+	int preWalkFrameCounter;
+	int preJumpFrameCounter;
+	int frameCounter;
+	int cycleCounter;
 };
 

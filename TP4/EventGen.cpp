@@ -5,14 +5,8 @@ using namespace std;
 
 EventGen::EventGen()
 {
-	eventQueue = NULL;
-	timer = NULL;
-	if (!(eventQueue = al_create_event_queue()))
-	{
-		cout << "Error al inicializar la cola de eventos de Alegro" << endl;
-	}
-
-	//Habría que crear timer más keyboard me parece
+	eventQueue = al_create_event_queue();
+	timer = al_create_timer(1/FPS);
 }
 
 
@@ -33,13 +27,17 @@ bool EventGen::newEvent(void)
 	}
 }
 
-Evento EventGen::nextEvent(void)
+ALLEGRO_EVENT* EventGen::nextEvent(void)
 {
+	ALLEGRO_EVENT* ev;
+	al_get_next_event(eventQueue, &ev);
+	return ev;
 }
 
 bool EventGen::quitEvent(void)
 {
 }
+
 
 ALLEGRO_EVENT_QUEUE * EventGen::getQueue(void)
 {

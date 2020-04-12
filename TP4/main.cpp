@@ -1,10 +1,11 @@
 #include <iostream>
 #include "EventGen.h"
 #include "Simulation.h"
-#include "Dispatcher.h"
 #include <ctime>
 
 using namespace std;
+
+void dispatchEvent(ALLEGRO_EVENT* eventPtr, Simulation *simPtr);
 
 int main(int argc, char *argv[])
 {
@@ -12,7 +13,6 @@ int main(int argc, char *argv[])
 	bool res = true;
 	Simulation *simPtr = new (nothrow) Simulation();
 	EventGen * generator= new (nothrow) EventGen();
-	Dispatcher *dispatcher = new (nothrow) Dispatcher();
 	srand(time(NULL));
 
 	//Se verifica que los objetos anteriores se hayan podido crear. 
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 		{
 			if (generator->newEvent())	//Revisa si hay eventos para atender.
 			{
-				dispatcher->dispatchEvent(generator->nextEvent(), simPtr);	//Procede según el tipo de evento recibido
+				dispatchEvent(generator->nextEvent(), simPtr);	//Procede según el tipo de evento recibido
 			}
 		}
 	}
@@ -48,4 +48,39 @@ int main(int argc, char *argv[])
 	delete generator;
 	delete dispatcher;
 	delete simPtr;
+}
+
+
+
+void dispatchEvent(ALLEGRO_EVENT *eventPtr, Simulation * simPtr)
+{
+	{
+		
+		{
+		case ALLEGRO_EVENT_KEY_DOWN:
+			for (int i = 0; i < simPtr->getWormNum(); i++)
+			{
+				simPtr->wormPtr[i]->updateWorm(evento);
+			}
+			break;
+
+		case ALLEGRO_EVENT_KEY_UP:
+			for (int i = 0; i < simPtr->getWormNum; i++)
+			{
+				simPtr->wormPtr[i]->stopWorm();
+			}
+			break;
+
+		case ALLEGRO_EVENT_TIMER:
+			for (int i = 0; i < simPtr->getWormNum(); i++)
+			{
+				simPtr->wormPtr[i]->updateWorm(evento);
+				simPtr->grapher->updateGrapher(simPtr->wormPtr, simPtr->getWormNum());
+			}
+			break;
+
+		default:
+			break;
+		}
+	}
 }

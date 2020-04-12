@@ -54,6 +54,12 @@ bool Graph::setAllegro(int width, int height)
 			return false;
 	}
 
+	if (!(al_install_keyboard()))
+	{
+		cout << "No es posible crear el teclado." << endl;
+			return false;
+	}
+
 	return true;
 }
 

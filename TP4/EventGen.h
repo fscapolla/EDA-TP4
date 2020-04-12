@@ -2,6 +2,7 @@
 #include "Evento.h"
 #include <iostream>
 #include <allegro5/allegro.h>
+#define FPS 50
 
 class EventGen
 {
@@ -10,7 +11,7 @@ public:
 	~EventGen();
 
 	bool newEvent(void);	//Revisa si hay un nuevo evento.
-	Evento nextEvent(void);	//Regresa el siguiente evento a ser atendido.
+	ALLEGRO_EVENT* nextEvent(void);	//Regresa el siguiente evento a ser atendido.
 	bool quitEvent(void);	//Verifica si se seleccionó el evento que finaliza el programa.
 
 	//Getters
