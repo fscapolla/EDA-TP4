@@ -128,7 +128,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Dispatcher.cpp" />
     <ClCompile Include="EventGen.cpp" />
     <ClCompile Include="Evento.cpp" />
     <ClCompile Include="Graph.cpp" />
@@ -137,7 +136,6 @@
     <ClCompile Include="Worm.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Dispatcher.h" />
     <ClInclude Include="EventGen.h" />
     <ClInclude Include="Evento.h" />
     <ClInclude Include="Graph.h" />

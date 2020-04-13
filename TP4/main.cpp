@@ -9,67 +9,114 @@
 
 
 using namespace std;
+void dispatch(eventos eventNow, Simulation* simPtr);
 
-int main(int argc, char *argv[])
-{
-	//Se crean los objetos para manejar eventos.
+int main(int argc, char* argv[]) {
+
+	// Se crean los objetos para manejar eventos.
 	bool res = true;
 
-	Simulation *simPtr = new (nothrow) Simulation();
+	Simulation* simPtr = new (nothrow) Simulation();
 	if (!(simPtr->initSim(X_DISPLAY, Y_DISPLAY)))
 	{
 		cout << "No se pudo asignar memoria." << endl;
 		res = false;
 	}
-	// Dispatcher *dispatcher = new (nothrow) Dispatcher();
-	EventGen* generator = new (nothrow) EventGen();
-	res = generator->Init();
-	
+
 	srand(time(NULL));
 
-	//Se verifica que los objetos anteriores se hayan podido crear. 
-	if ((simPtr==nullptr) || (generator==nullptr))
+	// Se verifica que los objetos anteriores se hayan podido crear. 
+	EventGen* generator = new (nothrow) EventGen();
+
+	eventos eventNow = NOTHING;
+
+	if ((simPtr == nullptr) || (generator == nullptr))
 	{
-		cout << "No se pudo asignar memoria."<<endl;
+		cout << "No se pudo asignar memoria." << endl;
 		res = false;
 	}
 
-	//Se generan los dos objetos Worms que controlará el jugador y la parte gráfica.
-
-	
-	// simPtr->startSim();	//Incializa a los worms y le otorga a cada uno sus teclas.
-
-
-	//Suponiendo que no hubo errores de inicialización, comienza el juego.
 	if (res)
 	{
-		int i = 0;
-		while (!(generator->quitEvent()))	//Si el evento no es de finalización de juego, éste continúa
+		while (eventNow != QUIT)	//Si el evento no es de finalización de juego, éste continúa
 		{
-			if (generator->newEvent())	//Revisa si hay eventos para atender.
-			{
-				// dispatcher->dispatchEvent(generator->nextEvent(), simPtr);	//Procede según el tipo de evento recibido
+			eventNow = generator->nextEvent();
 
-				if (generator->getEvent() == ALLEGRO_EVENT_TIMER) {
-					if (i >= 15) {
-						i = 0;
-					}
-					simPtr->grapher->drawFrame(
-						1212, 
-						616, 
-						simPtr->grapher->walkingFrames,
-						1, 
-						-1
-					);
-					al_flip_display();
-					i++;
-				}
+			if (eventNow != QUIT && eventNow != NOTHING)	//Revisa si hay eventos para atender.
+			{
+				dispatch(eventNow, simPtr);
 			}
 		}
 	}
 
-	//Se libera la memoria dinámica.
 	delete generator;
-	// delete dispatcher;
 	delete simPtr;
+
+	return 0;
 }
+
+
+void dispatch(eventos eventNow, Simulation* simPtr) {
+	switch (eventNow) { 
+	// Analiza el evento recibido
+
+		//Flechas que se aplican al worm1
+	case UP_ON:
+		//		worm1->jump();
+		break;
+	case UP_OFF:
+		//		worm1->stopJumping();
+		break;
+	case LEFT_ON:
+		//		worm1->left();
+		break;
+	case LEFT_OFF:
+		//		worm1->stopLeft();
+		break;
+	case RIGHT_ON:
+		//		worm1->goRight();
+		break;
+	case RIGHT_OFF:
+		//		worm1->stopRight();
+		break;
+
+		//WASD que se aplican al worm2
+	case W_ON:
+		//		worm2->jump();
+		break;
+	case W_OFF:
+		//		wormP2->stopJumping();
+		break;
+	case A_ON:
+		//		wormP2->goLeft();
+		break;
+	case A_OFF:
+		//		wormP2->stopLeft();
+		break;
+	case D_ON:
+		//		wormP2->goRight();
+		break;
+	case D_OFF:
+		//		wormP2->stopRight();
+		break;
+
+		//Caso TIMER, mira para ver si tiene que avanzar o no
+	case TIME:
+		//Se me ocurre que podriamos updeitear los worms dependiendo del 
+		//estado en el que esten y lo que indique el contador de cada uno.
+//		worm1->updateStatus();
+//		worm2->updateStatus();
+		break;
+	}
+	simPtr->grapher->drawFrame(
+		/* worm->x*/
+		1212,
+		616,
+		simPtr->grapher->walkingFrames,
+		1,
+		-1
+	);
+	al_flip_display();
+	//		simulGraph(*wormP1, *wormP2);
+}
+

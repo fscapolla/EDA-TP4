@@ -3,26 +3,45 @@
 #include <iostream>
 #include <allegro5/allegro.h>
 
+#define FPS 50.0
+
+typedef enum { 
+	UP_ON,
+	UP_OFF,
+	LEFT_ON,
+	LEFT_OFF,
+	RIGHT_ON,
+	RIGHT_OFF, 
+	W_ON, 
+	W_OFF, 
+	A_ON, 
+	A_OFF, 
+	D_ON, 
+	D_OFF, 
+	TIME, 
+	NOTHING, 
+	QUIT 
+} eventos;
+
 
 class EventGen
 {
 public:
-	~EventGen();
+	EventGen();
 
-	EventGen(ALLEGRO_EVENT_QUEUE* Queue_ = nullptr, ALLEGRO_TIMER* timer = nullptr);
-	bool Init(double fps = 20.0);
-	bool newEvent(void);	//Revisa si hay un nuevo evento.
-	Evento nextEvent(void);	//Regresa el siguiente evento a ser atendido.
-	bool quitEvent(void);	//Verifica si se seleccionó el evento que finaliza el programa.
+	eventos nextEvent(void);	//Regresa el siguiente evento a ser atendido.
 
 	//Getters
 	ALLEGRO_EVENT_QUEUE* getQueue(void);
-	ALLEGRO_EVENT_TYPE getEvent(void);
+
+	eventos getKey(ALLEGRO_EVENT* eventNow);
+
+	~EventGen();
 
 private:
-	Evento evento;
 	ALLEGRO_EVENT_QUEUE * eventQueue;
 	ALLEGRO_TIMER * timer;
-	ALLEGRO_EVENT alEvent;
+
+	// ALLEGRO_DISPLAY * display;
 };
 

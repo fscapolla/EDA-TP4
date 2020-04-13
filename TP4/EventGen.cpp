@@ -3,37 +3,28 @@
 using namespace std;
 
 
-EventGen::EventGen(ALLEGRO_EVENT_QUEUE* Queue_, ALLEGRO_TIMER* timer_) {
-	this->eventQueue = Queue_;
-	this->timer = timer_;
-}
+EventGen::EventGen() {
 
-
-bool EventGen::Init(double FPS)
-{
-	bool res = true;
-	// Create event queue
-	if (!(eventQueue = al_create_event_queue()))
-	{
-		cout << "Error al inicializar la cola de eventos de Alegro" << endl;
-		res = false;
-	}
-
-	// Create timer and register it in queue
-	this->timer = al_create_timer(1 / FPS);
-	if (this->timer)
-	{
+	// CREO E INICIALIZO TIMER
+	if (!(timer = al_create_timer(1.0 / FPS)))
+		cout << "Error al inicializar timer de allegro" << endl;
+	else
 		al_start_timer(timer);
-		// Registro el timer en la queue
-		al_register_event_source(this->eventQueue, al_get_timer_event_source(this->timer));
-	}
-	else {
-		cout << "Error al crear el Timer" << endl;
-		res = false;
-	}
-	return res;
-}
 
+	// CREO E INICIALIZO COLA
+	if (!(eventQueue = al_create_event_queue()))
+		cout << "Error al inicializar la cola de eventos de Alegro" << endl;
+
+	// Registro el timer en la queue
+	al_register_event_source(eventQueue, al_get_timer_event_source(timer));
+
+	// FALTA REGISTRAR DISPLAY
+	if (!al_install_keyboard())
+		cout << "Error al inicializar el teclado" << endl;
+
+	al_register_event_source(eventQueue, al_get_keyboard_event_source());
+
+}
 
 EventGen::~EventGen()
 {
@@ -41,38 +32,94 @@ EventGen::~EventGen()
 		al_destroy_event_queue(eventQueue);
 	if (timer)
 		al_destroy_timer(timer);
+	// HACE FALTA DESTRUIR KEYBOARD ?
+	
 }
 
-
-bool EventGen::newEvent(void)
-{
-	if (!(al_event_queue_is_empty(eventQueue))){
-		return true;
-	}
+eventos EventGen::nextEvent(void) {
+	ALLEGRO_EVENT eventNow;
+	eventos eventType;
+	if (!al_get_next_event(eventQueue, &eventNow))
+		eventType = NOTHING; // si no hay eventos no hace nada
 	else {
-		return false;
+		switch (eventNow.type) {
+		case ALLEGRO_EVENT_TIMER:
+			eventType = TIME; // Si es de timer hay que reiniciar
+			break;
+		case ALLEGRO_EVENT_DISPLAY_CLOSE:
+			eventType = QUIT;
+			break;
+		case ALLEGRO_EVENT_KEY_UP:
+			eventType = getKey(&eventNow); // agarrro la tecla que fue levantada
+			break;
+		case ALLEGRO_KEY_DOWN:
+			eventType = getKey(&eventNow); // agarro la tecla que fue presionada
+			break;
+		default:
+			eventType = NOTHING;
+			break;
+		}
 	}
+
+	return eventType;
 }
 
-Evento EventGen::nextEvent(void)
-{
-	return evento;
+eventos EventGen::getKey(ALLEGRO_EVENT* eventNow) {
+	eventos eventType = NOTHING;
+	if (eventNow->type == ALLEGRO_EVENT_KEY_UP) {
+		switch (eventNow->keyboard.keycode) {
+		case ALLEGRO_KEY_UP:
+			eventType = UP_ON;
+			break;
+		case ALLEGRO_KEY_LEFT:
+			eventType = LEFT_ON;
+			break;
+		case ALLEGRO_KEY_RIGHT:
+			eventType = RIGHT_ON;
+			break;
+		case ALLEGRO_KEY_W:
+			eventType = W_ON;
+			break;
+		case ALLEGRO_KEY_A:
+			eventType = A_ON;
+			break;
+		case ALLEGRO_KEY_D:
+			eventType = D_ON;
+			break;
+		default:
+			eventType = NOTHING;
+			break;
+		}
+	}
+	else if (eventNow->type == ALLEGRO_EVENT_KEY_DOWN) {
+		switch (eventNow->keyboard.keycode) {
+		case ALLEGRO_KEY_UP:
+			eventType = UP_OFF;
+			break;
+		case ALLEGRO_KEY_LEFT:
+			eventType = LEFT_OFF;
+			break;
+		case ALLEGRO_KEY_RIGHT:
+			eventType = RIGHT_OFF;
+			break;
+		case ALLEGRO_KEY_W:
+			eventType = W_OFF;
+			break;
+		case ALLEGRO_KEY_A:
+			eventType = A_OFF;
+			break;
+		case ALLEGRO_KEY_D:
+			eventType = D_OFF;
+			break;
+		default:
+			eventType = NOTHING;
+			break;
+		}
+	}
+	return eventType;
 }
 
-bool EventGen::quitEvent(void)
-{
-	return false;
-}
-
-ALLEGRO_EVENT_QUEUE * EventGen::getQueue(void)
+ALLEGRO_EVENT_QUEUE* EventGen::getQueue(void)
 {
 	return eventQueue;
-}
-
-ALLEGRO_EVENT_TYPE EventGen::getEvent(void)
-{
-	if (al_get_next_event(eventQueue, &alEvent))
-		return alEvent.type;
-	else
-		return NULL;
 }
