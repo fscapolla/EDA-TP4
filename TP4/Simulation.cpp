@@ -50,12 +50,10 @@ bool Simulation::initSim(int width, int height)	//Inicializa a los worms y al ob
 void Simulation::assignKeys(void)
 {
 	int walkKeys[] = { P1_KEY_RIGHT,P1_KEY_LEFT,P2_KEY_RIGHT,P2_KEY_LEFT };
-	int jumpKeys[] = { P1_KEY_UP, NULL, P2_KEY_UP };
+	int jumpKeys[] = { P1_KEY_UP, NULL, P2_KEY_UP };;
 
-	for (int i = 0; i <= (wormNum+1); i=i+2)
-	{
-		wormPtr[i]->setWormKeys(jumpKeys[i], walkKeys[i], walkKeys[i + 1]);
-	}
+	wormPtr[0]->setWormKeys(P1_KEY_RIGHT, P1_KEY_LEFT, P1_KEY_UP);
+	wormPtr[1]->setWormKeys(P2_KEY_RIGHT, P2_KEY_LEFT, P2_KEY_UP);
 }
 
 
