@@ -10,7 +10,7 @@ class EventGen
 public:
 	EventGen();
 	
-	EventGen(Graph* graph= nullptr);
+	EventGen(Graph* graph = nullptr);
 
 	int nextEvent(void);	// Regresa si hay evento o no
 

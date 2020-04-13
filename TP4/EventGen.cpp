@@ -69,7 +69,7 @@ void EventGen::dispatch(Simulation* simPtr) {
 			simPtr->wormPtr[i]->moveWorm(alEvent.keyboard.keycode);
 		}
 		break;
-	case ALLEGRO_ALPHA_SHIFT:
+	case ALLEGRO_EVENT_TIMER:
 		al_clear_to_color(al_map_rgb(0, 0, 0));
 		al_set_target_backbuffer(simPtr->grapher->getDisplay());
 		al_draw_bitmap(simPtr->grapher->getBackground(), 0, 0, 0);
@@ -84,7 +84,7 @@ void EventGen::dispatch(Simulation* simPtr) {
 				simPtr->wormPtr[i]->getY(),
 				simPtr->grapher->walkingFrames,
 				simPtr->wormPtr[i]->getWalkFrameCounter(),
-				-1
+				simPtr->wormPtr[i]->getDirection()
 			);
 		}
 		break;
