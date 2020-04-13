@@ -252,6 +252,17 @@ void Worm::wormFSM(int keyCode_, wormEvents_n eventType_)		//Analiza el estado a
 				y = FLOOR;
 			}
 			break;
+		case LANDING:
+			if (frameCounter >= FIRSTFALLFRAME && frameCounter <= LASTFALLFRAME) //Mientras está descendiendo no se modifica el estado.
+			{
+			}
+			else
+			{
+				currentState = IDLE;		//Worm has landed.
+				frameCounter = 0;
+				y = FLOOR;
+			}
+			break;
 
 		default:
 			break;
