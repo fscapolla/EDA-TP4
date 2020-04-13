@@ -19,6 +19,7 @@ Worm::Worm()	//Se inicializa el worm en reposo y mirando a la derecha por defect
 	rightKey = NULL;
 	leftKey = NULL;
 	jumpKey = NULL;
+	yspeed = INITIALYSPEED;
 	jumpingSpeed = JUMPINGSPEED;
 	walkingSpeed = WALKINGSPEED;
 }
@@ -45,14 +46,14 @@ void Worm::wormWalk(void)
 		frameCounter = 0;
 	}
 
-	x += walkingSpeed*direction;
+	x += ONESTEP*direction;
 	if (x > RIGHT_EDGE)
 	{
-		x -= RIGHT_EDGE;
+		direction = LEFT;
 	}
 	if (x <= LEFT_EDGE)
 	{
-		x += LEFT_EDGE;
+		direction = RIGHT;
 	}
 
 	walkFrameCounter++;
@@ -143,6 +144,7 @@ void Worm::moveWorm(int keyCode_)		//Analiza el estado actual del worm y procede
 		break;
 
 	case BEGIN_JUMPING:
+		preJumpFrameCounter++;
 		jumpWarmUp();
 		break;
 
@@ -245,13 +247,14 @@ void Worm::moveWorm(int keyCode_)		//Analiza el estado actual del worm y procede
 
 	void Worm::jumpWarmUp(void)		//Lleva a cabo el las animaciones de warm up antes del salto.
 	{
-		if (frameCounter >= 0 && frameCounter <= IDLEFRAMES)	//Warmup.
-		{
-		}	
-		else
-		{
-			currentState = JUMPING;		//Una vez que finalizó el warm up comienza a moverse.
-		}
+			if (frameCounter >= 0 && frameCounter <= IDLEFRAMES)	//Warmup.
+			{
+				x += jumpingSpeed*direction*jumpFrameCounter;
+			}
+			else
+			{
+				currentState = JUMPING;		//Una vez que finalizó el warm up comienza a moverse.
+			}
 	}
 
 
@@ -398,4 +401,9 @@ int Worm::getWalkFrameCounter(void)
 int Worm::getJumpFrameCounter(void)
 {
 	return jumpFrameCounter;
+}
+
+int Worm::getFrameCounter(void)
+{
+	return frameCounter;
 }

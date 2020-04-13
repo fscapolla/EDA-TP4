@@ -24,6 +24,10 @@
 #define WALKINGSPEED 0,54	// Debe moverse 27 píxeles en 50 ciclos, de donde la velocidad es de 0,54 píxeles/ciclo.
 #define FIRSTFALLFRAME 5
 #define LASTFALLFRAME 10
+#define INITIALYSPEED -sin(ANGLE)*JUMPINGSPEED
+#define FALLFRAMES ((-1*INITIALYSPEED)/(0.5*G))
+#define FPS 50
+
 
 typedef enum {LEFT=-1, RIGHT=1} dir_n;
 typedef enum { BEGIN_MOVING, IDLE, MOVING, STOP_MOVING, BEGIN_JUMPING, JUMPING, LANDING } wormStates_n;
@@ -64,6 +68,7 @@ public:
 	int getRightKey(void);
 	int getWalkFrameCounter(void);
 	int getJumpFrameCounter(void);
+	int getFrameCounter(void);
 
 
 	//Setters
@@ -99,5 +104,8 @@ private:	//Escribo todas las variables que se me ocurren pueden resultar útiles.
 	int preJumpFrameCounter;
 	int frameCounter;
 	int cycleCounter;
+	double preX;
+	double preY;
+	double yspeed;
 };
 

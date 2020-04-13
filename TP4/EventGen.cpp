@@ -76,17 +76,27 @@ void EventGen::dispatch(Simulation* simPtr) {
 		for (int i = 0; i < 2; i++) {
 			simPtr->wormPtr[i]->updateWorm();
 			simPtr->wormPtr[i]->refresh_worm();
-			cout << "worm " << i<< " X " << simPtr->wormPtr[i]->getX() << endl;
+			cout << "worm " << i << " X " << simPtr->wormPtr[i]->getX() << endl;
 			cout << "worm " << i << " Y " << simPtr->wormPtr[i]->getY() << endl;
-			cout << "worm " << i << " frame " << simPtr->wormPtr[i]->getWalkFrameCounter() << endl;
-			simPtr->grapher->drawFrame(
-				simPtr->wormPtr[i]->getX(),
-				simPtr->wormPtr[i]->getY(),
-				simPtr->grapher->walkingFrames,
-				simPtr->wormPtr[i]->getWalkFrameCounter()%15,
-				simPtr->wormPtr[i]->getDirection()
-			);
+			cout << "worm " << i << " frame " << simPtr->wormPtr[i]->getFrameCounter() << endl;
+
+			if (simPtr->wormPtr[i]->getState() == BEGIN_MOVING || simPtr->wormPtr[i]->getState() == MOVING || simPtr->wormPtr[i]->getState() == IDLE)
+				simPtr->grapher->drawFrame(
+					simPtr->wormPtr[i]->getX(),
+					simPtr->wormPtr[i]->getY(),
+					simPtr->grapher->walkingFrames,
+					simPtr->wormPtr[i]->getFrameCounter() % 15,
+					simPtr->wormPtr[i]->getDirection()
+				);
+
+			else if (simPtr->wormPtr[i]->getState() == BEGIN_JUMPING || simPtr->wormPtr[i]->getState() == JUMPING || simPtr->wormPtr[i]->getState() == LANDING)
+				simPtr->grapher->drawFrame(
+					simPtr->wormPtr[i]->getX(),
+					simPtr->wormPtr[i]->getY(),
+					simPtr->grapher->jumpingFrames,
+					simPtr->wormPtr[i]->getFrameCounter() % 15,
+					simPtr->wormPtr[i]->getDirection()
+				);
 		}
-		break;
 	}
 }
