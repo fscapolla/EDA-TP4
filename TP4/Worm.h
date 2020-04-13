@@ -16,8 +16,8 @@
 #define FLOOR		616
 #define WAITINGFRAMES 8
 #define MOVINGFRAMES 14
-#define FULLMOVEFRAME (3*(MOVINGFRAMES+1))
-#define CYCLEFRAMES (FULLMOVEFRAME+5)
+#define FULLMOVEFRAME 45
+#define CYCLEFRAMES 50
 #define IDLEFRAMES 4
 #define ONESTEP		9
 #define RESETCYCLE 3
@@ -26,11 +26,12 @@
 #define LASTFALLFRAME 10
 #define INITIALYSPEED -sin(ANGLE)*JUMPINGSPEED
 #define FALLFRAMES ((-1*INITIALYSPEED)/(0.5*G))
-#define FPS 50
+#define ONEJUMP ((4.5)*cos(ANGLE))
 
 
 typedef enum {LEFT=-1, RIGHT=1} dir_n;
 typedef enum { BEGIN_MOVING, IDLE, MOVING, STOP_MOVING, BEGIN_JUMPING, JUMPING, LANDING } wormStates_n;
+typedef enum { KEY_DOWN, KEY_UP, REFRESH } wormEvents_n;
 
 
 
@@ -47,9 +48,7 @@ public:
 	void wormWalk(void);	//Mueve al worm 9 píxeles en alguna de las 2 direcciones posibles.
 	void wormJump(void);	//Mueve al worm durante el salto.
 	void setWormKeys(int jumpKey_, int rightKey_, int leftKey_);
-	void moveWorm(int keyCode_);
-	void stopWorm(int keyCode_);
-	void refresh_worm(void);
+	void wormFSM(int keyCode_, wormEvents_n eventType_);
 	void jumpWarmUp(void);
 	void turnWorm(int keyCode_);
 	void updateWorm(void);

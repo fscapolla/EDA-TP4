@@ -5,6 +5,8 @@
 Worm::Worm()	//Se inicializa el worm en reposo y mirando a la derecha por defecto. Aparecen en posiciones aleatorias. 
 {
 	currentState = IDLE;
+	angle = ANGLE;
+	g = G;
 	isJumping = false;
 	isWalking = false;
 	x = randBetweenReal((double)LEFT_EDGE, (double)RIGHT_EDGE);
@@ -64,14 +66,14 @@ void Worm::wormJump(void)
 	x += (direction*jumpingSpeed*cos(angle));
 	if (x > RIGHT_EDGE)
 	{
-		x -= RIGHT_EDGE;
+		direction=LEFT;
 	}
 	if (x < LEFT_EDGE)
 	{
-		x += LEFT_EDGE;
+		direction=RIGHT;
 	}
 	
-	y += ((-1)*jumpingSpeed*sin(angle)*jumpFrameCounter + (g / 2)*pow(jumpFrameCounter, 2));
+	y = FLOOR - jumpingSpeed*sin(angle)*jumpFrameCounter + 0.5*g*jumpFrameCounter*jumpFrameCounter;
 }
 
 
@@ -84,100 +86,99 @@ void Worm::setWormKeys(int jumpKey_, int rightKey_, int leftKey_)
 
 
 
-void Worm::moveWorm(int keyCode_)		//Analiza el estado actual del worm y procede acorde. Actúa cuando llega un evento de tipo key_Down
+void Worm::wormFSM(int keyCode_, wormEvents_n eventType_)		//Analiza el estado actual del worm y procede acorde. Actúa cuando llega un evento de tipo key_Down
 {
-	switch (currentState)
-	{
-	case IDLE:
-		if (keyCode_ == jumpKey)	
+	if (eventType_ == KEY_DOWN) {
+		switch (currentState)
 		{
-			currentState = BEGIN_JUMPING;
-			frameCounter = 0;
-			jumpWarmUp();
-		}
-		else if (keyCode_ == rightKey || keyCode_ == leftKey)
-		{
-			currentState = BEGIN_MOVING;
-			direction = ((keyCode_ == rightKey) ? RIGHT : LEFT);
-			preWalkFrameCounter = 0;
-			frameCounter = 0;
-		}
-		break;
-
-	case BEGIN_MOVING:
-		if (keyCode_ == jumpKey)
-		{
-			frameCounter = 0;
-			currentState = BEGIN_JUMPING;
-			jumpWarmUp();
-		}
-		else if (keyCode_ == rightKey || keyCode_ == leftKey)
-		{
-			if (preWalkFrameCounter >= IDLEFRAMES)
+		case IDLE:
+			if (keyCode_ == jumpKey)
 			{
-				currentState = MOVING;
+				currentState = BEGIN_JUMPING;
+				frameCounter = 0;
+				jumpWarmUp();
+			}
+			else if (keyCode_ == rightKey || keyCode_ == leftKey)
+			{
+				currentState = BEGIN_MOVING;
+				direction = ((keyCode_ == rightKey) ? RIGHT : LEFT);
 				preWalkFrameCounter = 0;
 				frameCounter = 0;
 			}
-		}
-		break;
+			break;
 
-	case MOVING:
-		if (keyCode_ == jumpKey)
-		{
-			currentState = BEGIN_JUMPING;
-			frameCounter = 0;
+		case BEGIN_MOVING:
+			if (keyCode_ == jumpKey)
+			{
+				frameCounter = 0;
+				currentState = BEGIN_JUMPING;
+				jumpWarmUp();
+			}
+			else if (keyCode_ == rightKey || keyCode_ == leftKey)
+			{
+				if (preWalkFrameCounter >= IDLEFRAMES)
+				{
+					currentState = MOVING;
+					preWalkFrameCounter = 0;
+					frameCounter = 0;
+				}
+			}
+			break;
+
+		case MOVING:
+			if (keyCode_ == jumpKey)
+			{
+				currentState = BEGIN_JUMPING;
+				frameCounter = 0;
+				jumpWarmUp();
+			}
+			else if (keyCode_ == rightKey || keyCode_ == leftKey)
+			{
+				wormWalk();
+				if (walkFrameCounter >= FULLMOVEFRAME)
+				{
+					preWalkFrameCounter++;
+				}
+				if (walkFrameCounter >= CYCLEFRAMES)
+				{
+					walkFrameCounter = 0;
+				}
+			}
+			break;
+
+		case BEGIN_JUMPING:
 			jumpWarmUp();
-		}
-		else if (keyCode_ == rightKey || keyCode_ == leftKey)
-		{
-			wormWalk();
-			if (walkFrameCounter >= FULLMOVEFRAME)
-			{
-				preWalkFrameCounter++;
+			break;
+
+		case JUMPING:
+			if (y <= FLOOR)		//Si toadavía no aterrizo actualiza la posición y los contadores.
+				wormJump();
+			else {
+				frameCounter = FIRSTFALLFRAME;		//Una vez que aterriza se pasa a dibujar los frames de aterrizaje.
+				jumpFrameCounter = 0;
+				currentState = LANDING;
+				y = FLOOR;
 			}
-			if (walkFrameCounter >= CYCLEFRAMES)
+			break;
+
+		case LANDING:
+			if (frameCounter >= FIRSTFALLFRAME && frameCounter <= LASTFALLFRAME) //Mientras está descendiendo no se modifica el estado.
 			{
-				walkFrameCounter = 0;
 			}
-		}
-		break;
+			else
+			{
+				currentState = IDLE;		//Worm has landed.
+				frameCounter = 0;
+				y = FLOOR;
+			}
+			break;
 
-	case BEGIN_JUMPING:
-		preJumpFrameCounter++;
-		jumpWarmUp();
-		break;
-
-	case JUMPING:
-		if(y<=FLOOR)		//Si toadavía no aterrizo actualiza la posición y los contadores.
-			wormJump();
-		else {
-			frameCounter = FIRSTFALLFRAME;		//Una vez que aterriza se pasa a dibujar los frames de aterrizaje.
-			jumpFrameCounter = 0;
-			currentState = LANDING;
-			y = FLOOR;
+		default:
+			break;
 		}
-		break;
-
-	case LANDING:
-		if (frameCounter >= FIRSTFALLFRAME && frameCounter <= LASTFALLFRAME) //Mientras está descendiendo no se modifica el estado.
-		{
-		}
-		else
-		{
-			currentState = IDLE;		//Worm has landed.
-			frameCounter = 0;
-			y = FLOOR;
-		}
-		break;
-
-	default:
-		break;
 	}
-}
 
-	void Worm::stopWorm(int keyCode_)	//Según el estado del worm actúa acorde. Se llama cuando llega un evento de tipo KEY_UP
-	{
+	if (eventType_ == KEY_UP) {
 		switch (currentState)
 		{
 		case MOVING:
@@ -211,9 +212,7 @@ void Worm::moveWorm(int keyCode_)		//Analiza el estado actual del worm y procede
 		}
 	}
 
-
-	void Worm::refresh_worm(void)		//Se encarga de actualizar los contadores de los worms.
-{
+	if (eventType_ == REFRESH) {
 		switch (currentState)
 		{
 		case IDLE:
@@ -227,7 +226,7 @@ void Worm::moveWorm(int keyCode_)		//Analiza el estado actual del worm y procede
 				frameCounter = 0;
 			}
 			break;
-			
+
 		case MOVING:
 			wormWalk();
 			if (walkFrameCounter >= FULLMOVEFRAME)
@@ -240,22 +239,39 @@ void Worm::moveWorm(int keyCode_)		//Analiza el estado actual del worm y procede
 			}
 			break;
 
+		case BEGIN_JUMPING:
+			jumpWarmUp();
+			break;
+		case JUMPING:
+			if (y <= FLOOR)		//Si toadavía no aterrizo actualiza la posición y los contadores.
+				wormJump();
+			else {
+				frameCounter = FIRSTFALLFRAME;		//Una vez que aterriza se pasa a dibujar los frames de aterrizaje.
+				jumpFrameCounter = 0;
+				currentState = LANDING;
+				y = FLOOR;
+			}
+			break;
+
 		default:
 			break;
 		}
+	}
 }
+
 
 	void Worm::jumpWarmUp(void)		//Lleva a cabo el las animaciones de warm up antes del salto.
 	{
-			if (frameCounter >= 0 && frameCounter <= IDLEFRAMES)	//Warmup.
-			{
-				x += jumpingSpeed*direction*jumpFrameCounter;
-			}
-			else
-			{
+		if (frameCounter >= 0 && frameCounter <= IDLEFRAMES)	//Warmup.
+		{
+		}
+		else
+		{
+			jumpFrameCounter = 0;
 				currentState = JUMPING;		//Una vez que finalizó el warm up comienza a moverse.
-			}
+		}
 	}
+
 
 
 	void Worm::turnWorm(int keyCode_)

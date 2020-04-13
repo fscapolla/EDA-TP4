@@ -15,7 +15,7 @@ using namespace std;
 Simulation::Simulation()		//Constructor de Simulation.
 {
 	Graph * grapher = nullptr;
-	int wormNum = PLAYERWORMS;
+	 wormNum = PLAYERWORMS;
 	for (int i = 0; i < wormNum; i++)
 	{
 		wormPtr[i] = nullptr;
@@ -54,6 +54,31 @@ void Simulation::assignKeys(void)
 
 	wormPtr[0]->setWormKeys(P1_KEY_UP, P1_KEY_RIGHT, P1_KEY_LEFT);
 	wormPtr[1]->setWormKeys(P2_KEY_UP, P2_KEY_RIGHT, P2_KEY_LEFT);
+}
+
+void Simulation::moveWorm(int keyCode_)
+{
+	for (int i = 0; i < wormNum; i++)
+	{
+		wormPtr[i]->wormFSM(keyCode_, KEY_DOWN);
+	}
+}
+
+void Simulation::stopWorm(int keyCode_)
+{
+	for (int i = 0; i < wormNum; i++)
+	{
+		wormPtr[i]->wormFSM(keyCode_, KEY_UP);
+	}
+}
+
+void Simulation::refresh_worm(int keyCode_)
+{
+	for (int i = 0; i < wormNum; i++)
+	{
+		wormPtr[i]->updateWorm();
+		wormPtr[i]->wormFSM(keyCode_, REFRESH);
+	}
 }
 
 

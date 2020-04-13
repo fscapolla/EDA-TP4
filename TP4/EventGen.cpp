@@ -59,23 +59,18 @@ void EventGen::dispatch(Simulation* simPtr) {
 	cout << alEvent.type << endl;
 	switch (alEvent.type) {
 	case ALLEGRO_EVENT_KEY_UP:
-		for (int i = 0; i < 2; i++) {
-			simPtr->wormPtr[i]->stopWorm(alEvent.keyboard.keycode);
-		}
+		simPtr->stopWorm(alEvent.keyboard.keycode);
 		break;
+
 	case ALLEGRO_EVENT_KEY_DOWN:
-		for (int i = 0; i < 2; i++) {
-			cout << "debug" << endl;
-			simPtr->wormPtr[i]->moveWorm(alEvent.keyboard.keycode);
-		}
+		simPtr->moveWorm(alEvent.keyboard.keycode);
 		break;
 	case ALLEGRO_EVENT_TIMER:
 		al_clear_to_color(al_map_rgb(0, 0, 0));
 		al_set_target_backbuffer(simPtr->grapher->getDisplay());
 		al_draw_bitmap(simPtr->grapher->getBackground(), 0, 0, 0);
+		simPtr->refresh_worm(alEvent.keyboard.keycode);
 		for (int i = 0; i < 2; i++) {
-			simPtr->wormPtr[i]->updateWorm();
-			simPtr->wormPtr[i]->refresh_worm();
 			cout << "worm " << i << " X " << simPtr->wormPtr[i]->getX() << endl;
 			cout << "worm " << i << " Y " << simPtr->wormPtr[i]->getY() << endl;
 			cout << "worm " << i << " frame " << simPtr->wormPtr[i]->getFrameCounter() << endl;
@@ -85,18 +80,29 @@ void EventGen::dispatch(Simulation* simPtr) {
 					simPtr->wormPtr[i]->getX(),
 					simPtr->wormPtr[i]->getY(),
 					simPtr->grapher->walkingFrames,
-					simPtr->wormPtr[i]->getFrameCounter() % 15,
+					simPtr->wormPtr[i]->getFrameCounter(),
 					simPtr->wormPtr[i]->getDirection()
 				);
 
-			else if (simPtr->wormPtr[i]->getState() == BEGIN_JUMPING || simPtr->wormPtr[i]->getState() == JUMPING || simPtr->wormPtr[i]->getState() == LANDING)
+			else if (simPtr->wormPtr[i]->getState() == BEGIN_JUMPING || simPtr->wormPtr[i]->getState() == LANDING)
 				simPtr->grapher->drawFrame(
 					simPtr->wormPtr[i]->getX(),
 					simPtr->wormPtr[i]->getY(),
 					simPtr->grapher->jumpingFrames,
-					simPtr->wormPtr[i]->getFrameCounter() % 15,
+					simPtr->wormPtr[i]->getFrameCounter() % 10,
 					simPtr->wormPtr[i]->getDirection()
 				);
+
+			else if (simPtr->wormPtr[i]->getState() == JUMPING)
+			{
+				simPtr->grapher->drawFrame(
+					simPtr->wormPtr[i]->getX(),
+					simPtr->wormPtr[i]->getY(),
+					simPtr->grapher->jumpingFrames,
+					5,
+					simPtr->wormPtr[i]->getDirection()
+				);
+			}
 		}
 	}
 }

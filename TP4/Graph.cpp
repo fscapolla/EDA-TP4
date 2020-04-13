@@ -118,6 +118,7 @@ void Graph::drawFrame(unsigned int posX, unsigned int posY, ALLEGRO_BITMAP** fra
 		flag = ALLEGRO_FLIP_HORIZONTAL;
 
 	al_draw_bitmap(frames[frame], posX, posY, flag);
+	cout << frame << endl;
 }
 
 ALLEGRO_BITMAP* Graph::getBackground(void) {

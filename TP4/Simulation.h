@@ -14,6 +14,9 @@ public:
 
 	bool initSim(int width, int height);
 	void assignKeys(void);
+	void moveWorm(int keyCode_);
+	void stopWorm(int keyCode_);
+	void refresh_worm(int keyCode_);
 
 	//Setters
 	void setWormNum(int wormNum_);
