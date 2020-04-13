@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 	srand(time(NULL));
 
 	//Se verifica que los objetos anteriores se hayan podido crear. 
-	if ((simPtr==nullptr) || (generator==nullptr) || (dispatcher==nullptr))
+	if ((simPtr==nullptr) || (generator==nullptr))
 	{
 		cout << "No se pudo asignar memoria."<<endl;
 		res = false;

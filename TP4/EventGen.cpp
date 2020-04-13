@@ -48,4 +48,3 @@ Evento * EventGen::getEvent(void)
 {
 	return evento;
 }
-

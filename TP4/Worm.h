@@ -3,8 +3,8 @@
 #include "random.h"
 #include <cmath>
 
-#define SPEED 4.5
-#define G 0.24
+#define JUMPINGSPEED 4.5
+#define G 0.24	
 #define MAXWORMS 10
 #define PLAYERWORMS 2
 #define PI 3.14159265359
@@ -16,12 +16,18 @@
 #define FLOOR		616
 #define WAITINGFRAMES 8
 #define MOVINGFRAMES 14
+#define FULLMOVEFRAME (3*(MOVINGFRAMES+1))
+#define CYCLEFRAMES (FULLMOVEFRAME+5)
 #define JUMPINGFRAMES 9
+#define IDLEFRAMES 4
 #define ONESTEP		9
 #define RESETCYCLE 3
+#define WALKINGSPEED 0,54	// Debe moverse 27 píxeles en 50 ciclos, de donde la velocidad es de 0,54 píxeles/ciclo.
+#define FIRSTFALLFRAME 5
+#define LASTFALLFRAME 10
 
-typedef enum {left,right} dir;
-typedef enum { begin_moving, idle, moving, Stop_moving, begin_jumping, jumping, landing } wormStates;
+typedef enum {left=-1, right=1} dir;
+typedef enum { begin_moving, idle, moving, stop_moving, begin_jumping, jumping, landing } wormStates;
 typedef enum { rightKeyDown, leftKeyDown, moveKeyUp, jumpKeyDown, jumpKeyUp, newFrame } wormEvents;
 
 
@@ -36,22 +42,25 @@ public:
 
 	void increaseWalkFrameCounter(void);
 	void increaseJumpFrameCounter(void);
-	void moveWorm(void);	//Mueve al worm 9 píxeles en alguna de las 2 direcciones posibles.
-	bool moveWormAir(void);	//Mueve al worm durante el salto.
-	void turn_around(void);	//Da la vuelta al worm para que quede mirando en la dirección opuesta
+	void wormWalk(void);	//Mueve al worm 9 píxeles en alguna de las 2 direcciones posibles.
+	void wormJump(void);	//Mueve al worm durante el salto.
 	void setWormKeys(int jumpKey_, int rightKey_, int leftKey_);
-	void updateWorm(int keyCode_);
-	void stopWorm(void);
+	void moveWorm(int keyCode_);
+	void stopWorm(int keyCode_);
 	void refresh_worm(void);
+	void jumpWarmUp(void);
+	void turnWorm(int keyCode_);
+	void updateWorm(void);
 
 	//Getters
 	double getX(void);
 	double getY(void);
 	dir getDirection(void);
 	wormStates getState(void);
-	double getSpeed(void);
+	double getJumpingSpeed(void);
 	double getGravity(void);
 	double getAngle(void);
+	double getWalkingSpeed(void);
 	int getJumpKey(void);
 	int getLeftKey(void);
 	int getRightKey(void);
@@ -83,7 +92,8 @@ private:	//Escribo todas las variables que se me ocurren pueden resultar útiles.
 	double x, y;
 	double g;
 	double angle;
-	double speed;
+	double jumpingSpeed;
+	double walkingSpeed;
 	wormStates currentState;
 	int walkFrameCounter;
 	int jumpFrameCounter;
