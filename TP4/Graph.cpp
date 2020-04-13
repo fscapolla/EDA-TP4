@@ -77,8 +77,6 @@ bool Graph::setAllegro(int width, int height, ALLEGRO_DISPLAY*& display)
 	return true;
 }
 
-
-
 bool Graph::setImages()
 {
 	bool res = true;

@@ -36,34 +36,17 @@ EventGen::~EventGen()
 	
 }
 
-eventos EventGen::nextEvent(void) {
-	ALLEGRO_EVENT eventNow;
-	eventos eventType;
-	if (!al_get_next_event(eventQueue, &eventNow))
-		eventType = NOTHING; // si no hay eventos no hace nada
-	else {
-		switch (eventNow.type) {
-		case ALLEGRO_EVENT_TIMER:
-			eventType = TIME; // Si es de timer hay que reiniciar
-			break;
-		case ALLEGRO_EVENT_DISPLAY_CLOSE:
-			eventType = QUIT;
-			break;
-		case ALLEGRO_EVENT_KEY_UP:
-			eventType = getKey(&eventNow); // agarrro la tecla que fue levantada
-			break;
-		case ALLEGRO_KEY_DOWN:
-			eventType = getKey(&eventNow); // agarro la tecla que fue presionada
-			break;
-		default:
-			eventType = NOTHING;
-			break;
-		}
-	}
-
-	return eventType;
+ALLEGRO_EVENT EventGen::getAllegroEvent(void) {
+	return alEvent;
 }
 
+int EventGen::nextEvent(void) {
+	int res = 1;
+	if (!al_get_next_event(eventQueue, &alEvent))
+		res = 0; // si no hay eventos no hace nada
+	return res;
+}
+/*
 eventos EventGen::getKey(ALLEGRO_EVENT* eventNow) {
 	eventos eventType = NOTHING;
 	if (eventNow->type == ALLEGRO_EVENT_KEY_UP) {
@@ -118,8 +101,31 @@ eventos EventGen::getKey(ALLEGRO_EVENT* eventNow) {
 	}
 	return eventType;
 }
+*/
+
 
 ALLEGRO_EVENT_QUEUE* EventGen::getQueue(void)
 {
 	return eventQueue;
+}
+
+void EventGen::dispatch(Simulation* simPtr) {
+	switch (alEvent.type) {
+	case ALLEGRO_KEY_UP:
+		for (int i = 0; i < simPtr->getWormNum(); i++) {
+			simPtr->wormPtr[i]->stopWorm(alEvent.keyboard.keycode);
+		}
+		break;
+	case ALLEGRO_KEY_DOWN:
+		for (int i = 0; i < simPtr->getWormNum(); i++) {
+			simPtr->wormPtr[i]->moveWorm(alEvent.keyboard.keycode);
+		}
+		break;
+	case ALLEGRO_EVENT_TIMER:
+		for (int i = 0; i < simPtr->getWormNum(); i++) {
+			simPtr->wormPtr[i]->updateWorm();
+			simPtr->wormPtr[i]->refresh_worm();
+		}
+		break;
+	}
 }
