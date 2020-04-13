@@ -26,9 +26,8 @@
 #define FIRSTFALLFRAME 5
 #define LASTFALLFRAME 10
 
-typedef enum {left=-1, right=1} dir;
-typedef enum { begin_moving, idle, moving, stop_moving, begin_jumping, jumping, landing } wormStates;
-typedef enum { rightKeyDown, leftKeyDown, moveKeyUp, jumpKeyDown, jumpKeyUp, newFrame } wormEvents;
+typedef enum {LEFT=-1, RIGHT=1} dir_n;
+typedef enum { BEGIN_MOVING, IDLE, MOVING, STOP_MOVING, BEGIN_JUMPING, JUMPING, LANDING } wormStates_n;
 
 
 
@@ -55,8 +54,8 @@ public:
 	//Getters
 	double getX(void);
 	double getY(void);
-	dir getDirection(void);
-	wormStates getState(void);
+	dir_n getDirection(void);
+	wormStates_n getState(void);
 	double getJumpingSpeed(void);
 	double getGravity(void);
 	double getAngle(void);
@@ -72,8 +71,8 @@ public:
 	void setX(double x_);
 	void setY(double y_);
 	void set_keys(char ku, char kl, char kr);
-	void setDirection(dir d);
-	void setState(wormStates newState);
+	void setDirection(dir_n d);
+	void setState(wormStates_n newState);
 	void setJumpKey(int jumpKey_);
 	void setRightKey(int rightKey_);
 	void setLeftKey(int leftKey_);
@@ -87,14 +86,14 @@ private:	//Escribo todas las variables que se me ocurren pueden resultar útiles.
 	int rightKey;
 	bool isRightKeyPressed;
 	bool isLeftKeyPressed;
-	dir direction;
+	dir_n direction;
 	unsigned int jumpDuration;
 	double x, y;
 	double g;
 	double angle;
 	double jumpingSpeed;
 	double walkingSpeed;
-	wormStates currentState;
+	wormStates_n currentState;
 	int walkFrameCounter;
 	int jumpFrameCounter;
 	int preWalkFrameCounter;

@@ -4,7 +4,7 @@
 
 Worm::Worm()	//Se inicializa el worm en reposo y mirando a la derecha por defecto. Aparecen en posiciones aleatorias. 
 {
-	currentState = idle;
+	currentState = IDLE;
 	isJumping = false;
 	isWalking = false;
 	x = randBetweenReal((double)LEFT_EDGE, (double)RIGHT_EDGE);
@@ -15,7 +15,7 @@ Worm::Worm()	//Se inicializa el worm en reposo y mirando a la derecha por defect
 	preJumpFrameCounter = 0;
 	frameCounter = 0;
 	cycleCounter = 0;
-	direction = right;
+	direction = RIGHT;
 	rightKey = NULL;
 	leftKey = NULL;
 	jumpKey = NULL;
@@ -88,44 +88,44 @@ void Worm::moveWorm(int keyCode_)		//Analiza el estado actual del worm y procede
 {
 	switch (currentState)
 	{
-	case idle:
-		if (keyCode_ == jumpKeyUp)	
+	case IDLE:
+		if (keyCode_ == jumpKey)	
 		{
-			currentState = begin_jumping;
+			currentState = BEGIN_JUMPING;
 			frameCounter = 0;
 			jumpWarmUp();
 		}
 		else if (keyCode_ = rightKey || keyCode_ == leftKey)
 		{
-			currentState = begin_moving;
-			direction = ((keyCode_ == rightKey) ? right : left);
+			currentState = BEGIN_MOVING;
+			direction = ((keyCode_ == rightKey) ? RIGHT : LEFT);
 			preWalkFrameCounter = 0;
 			frameCounter = 0;
 		}
 		break;
 
-	case begin_moving:
+	case BEGIN_MOVING:
 		if (keyCode_ == jumpKey)
 		{
 			frameCounter = 0;
-			currentState = begin_jumping;
+			currentState = BEGIN_JUMPING;
 			jumpWarmUp();
 		}
 		else if (keyCode_ == rightKey || keyCode_ == leftKey)
 		{
 			if (preWalkFrameCounter >= IDLEFRAMES)
 			{
-				currentState = moving;
+				currentState = MOVING;
 				preWalkFrameCounter = 0;
 				frameCounter = 0;
 			}
 		}
 		break;
 
-	case moving:
+	case MOVING:
 		if (keyCode_ == jumpKey)
 		{
-			currentState = begin_jumping;
+			currentState = BEGIN_JUMPING;
 			frameCounter = 0;
 			jumpWarmUp();
 		}
@@ -143,28 +143,28 @@ void Worm::moveWorm(int keyCode_)		//Analiza el estado actual del worm y procede
 		}
 		break;
 
-	case begin_jumping:
+	case BEGIN_JUMPING:
 		jumpWarmUp();
 		break;
 
-	case jumping:
+	case JUMPING:
 		if(y<=FLOOR)		//Si toadavía no aterrizo actualiza la posición y los contadores.
 			wormJump();
 		else {
 			frameCounter = FIRSTFALLFRAME;		//Una vez que aterriza se pasa a dibujar los frames de aterrizaje.
 			jumpFrameCounter = 0;
-			currentState = landing;
+			currentState = LANDING;
 			y = FLOOR;
 		}
 		break;
 
-	case landing:
+	case LANDING:
 		if (frameCounter >= FIRSTFALLFRAME && frameCounter <= LASTFALLFRAME) //Mientras está descendiendo no se modifica el estado.
 		{
 		}
 		else
 		{
-			currentState = idle;		//Worm has landed.
+			currentState = IDLE;		//Worm has landed.
 			frameCounter = 0;
 			y = FLOOR;
 		}
@@ -179,16 +179,16 @@ void Worm::moveWorm(int keyCode_)		//Analiza el estado actual del worm y procede
 	{
 		switch (currentState)
 		{
-		case moving:
+		case MOVING:
 			if (keyCode_ == rightKey || keyCode_ == leftKey)
 			{
 				if (walkFrameCounter <= FULLMOVEFRAME)		//Si está en la sección de warm up deja de moverse inmediatamente
 				{
-					currentState = idle;
+					currentState = IDLE;
 				}
 				if (walkFrameCounter >= FULLMOVEFRAME)		//si pasaron los 100 ms completa el ciclo y luego se detiene
 				{
-					currentState = begin_moving;
+					currentState = BEGIN_MOVING;
 					frameCounter = 0;
 					preWalkFrameCounter = 0;
 				}
@@ -196,11 +196,11 @@ void Worm::moveWorm(int keyCode_)		//Analiza el estado actual del worm y procede
 			}
 			break;
 
-		case begin_moving:
+		case BEGIN_MOVING:
 			if (keyCode_ == rightKey || keyCode_ == leftKey)		//Como no pasaron los primeros 100ms y no está en estado moving, se quedará quieto o cambiará de dirección.
 			{
 				preWalkFrameCounter = 0;
-				currentState = idle;
+				currentState = IDLE;
 				turnWorm(keyCode_);	//Revisa si es necesario cambiar la dirección de worm.
 			}
 			break;
@@ -215,19 +215,19 @@ void Worm::moveWorm(int keyCode_)		//Analiza el estado actual del worm y procede
 {
 		switch (currentState)
 		{
-		case idle:
+		case IDLE:
 			frameCounter = 0;
 			break;
-		case begin_moving:
+		case BEGIN_MOVING:
 			if (preWalkFrameCounter >= IDLEFRAMES)
 			{
-				currentState = moving;
+				currentState = MOVING;
 				preWalkFrameCounter = 0;
 				frameCounter = 0;
 			}
 			break;
 			
-		case moving:
+		case MOVING:
 			wormWalk();
 			if (walkFrameCounter >= FULLMOVEFRAME)
 			{
@@ -251,16 +251,16 @@ void Worm::moveWorm(int keyCode_)		//Analiza el estado actual del worm y procede
 		}	
 		else
 		{
-			currentState = jumping;		//Una vez que finalizó el warm up comienza a moverse.
+			currentState = JUMPING;		//Una vez que finalizó el warm up comienza a moverse.
 		}
 	}
 
 
 	void Worm::turnWorm(int keyCode_)
 	{
-		if ((keyCode_ == leftKey && direction == right) || (keyCode_ == rightKey && direction == left))	//Se debe invertir
+		if ((keyCode_ == leftKey && direction == RIGHT) || (keyCode_ == rightKey && direction == LEFT))	//Se debe invertir
 		{
-			direction = ((direction == right) ? left : right);
+			direction = ((direction == RIGHT) ? LEFT : RIGHT);
 		}
 	}
 
@@ -268,12 +268,12 @@ void Worm::moveWorm(int keyCode_)		//Analiza el estado actual del worm y procede
 	{
 		switch (currentState)
 		{
-		case begin_moving:			//Si todavía está en la etapa de warm up, actualiza sólo el contador temporario. (no el de frames de la caminata)
+		case BEGIN_MOVING:			//Si todavía está en la etapa de warm up, actualiza sólo el contador temporario. (no el de frames de la caminata)
 			preWalkFrameCounter++;
 			break;
 
-		case begin_jumping:
-		case jumping:
+		case BEGIN_JUMPING:
+		case JUMPING:
 			jumpFrameCounter++;
 			break;
 
@@ -301,12 +301,12 @@ void Worm::set_keys(char ku, char kl, char kr)
 {
 }
 
-void Worm::setDirection(dir d)
+void Worm::setDirection(dir_n d)
 {
 	direction = d;
 }
 
-void Worm::setState(wormStates nextState)
+void Worm::setState(wormStates_n nextState)
 {
 	currentState = nextState;
 }
@@ -346,12 +346,12 @@ double Worm::getY(void)
 	return y;
 }
 
-dir Worm::getDirection(void)
+dir_n Worm::getDirection(void)
 {
 	return direction;
 }
 
-wormStates Worm::getState(void)
+wormStates_n Worm::getState(void)
 {
 	return currentState;
 }
