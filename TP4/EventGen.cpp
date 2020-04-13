@@ -83,7 +83,7 @@ void EventGen::dispatch(Simulation* simPtr) {
 				simPtr->wormPtr[i]->getX(),
 				simPtr->wormPtr[i]->getY(),
 				simPtr->grapher->walkingFrames,
-				simPtr->wormPtr[i]->getWalkFrameCounter(),
+				simPtr->wormPtr[i]->getWalkFrameCounter()%15,
 				simPtr->wormPtr[i]->getDirection()
 			);
 		}

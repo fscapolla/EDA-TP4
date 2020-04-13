@@ -52,8 +52,8 @@ void Simulation::assignKeys(void)
 	int walkKeys[] = { P1_KEY_RIGHT,P1_KEY_LEFT,P2_KEY_RIGHT,P2_KEY_LEFT };
 	int jumpKeys[] = { P1_KEY_UP, NULL, P2_KEY_UP };;
 
-	wormPtr[0]->setWormKeys(P1_KEY_RIGHT, P1_KEY_LEFT, P1_KEY_UP);
-	wormPtr[1]->setWormKeys(P2_KEY_RIGHT, P2_KEY_LEFT, P2_KEY_UP);
+	wormPtr[0]->setWormKeys(P1_KEY_UP, P1_KEY_RIGHT, P1_KEY_LEFT);
+	wormPtr[1]->setWormKeys(P2_KEY_UP, P2_KEY_RIGHT, P2_KEY_LEFT);
 }
 
 

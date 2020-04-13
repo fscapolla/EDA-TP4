@@ -94,7 +94,7 @@ void Worm::moveWorm(int keyCode_)		//Analiza el estado actual del worm y procede
 			frameCounter = 0;
 			jumpWarmUp();
 		}
-		else if (keyCode_ = rightKey || keyCode_ == leftKey)
+		else if (keyCode_ == rightKey || keyCode_ == leftKey)
 		{
 			currentState = BEGIN_MOVING;
 			direction = ((keyCode_ == rightKey) ? RIGHT : LEFT);
