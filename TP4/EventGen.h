@@ -1,29 +1,31 @@
 #pragma once
-#include "Evento.h"
+#include "Simulation.h"
 #include <iostream>
 #include <allegro5/allegro.h>
-#define FPS 50
+
+#define FPS 50.0
 
 class EventGen
 {
 public:
 	EventGen();
-	~EventGen();
 
-	bool newEvent(void);	//Revisa si hay un nuevo evento.
-	ALLEGRO_EVENT* nextEvent(void);	//Regresa el siguiente evento a ser atendido.
-	bool quitEvent(void);	//Verifica si se seleccionó el evento que finaliza el programa.
+	int nextEvent(void);	// Regresa si hay evento o no
 
 	//Getters
 	ALLEGRO_EVENT_QUEUE* getQueue(void);
-	Evento * getEvent(void);
 
+	// eventos getKey(ALLEGRO_EVENT* eventNow);
 
+	ALLEGRO_EVENT getAllegroEvent(void);
 
+	void dispatch(Simulation* simPtr);
+
+	~EventGen();
 
 private:
-	Evento *evento;
 	ALLEGRO_EVENT_QUEUE * eventQueue;
 	ALLEGRO_TIMER * timer;
+	ALLEGRO_EVENT alEvent;
 };
 

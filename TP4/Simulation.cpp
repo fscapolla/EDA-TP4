@@ -24,9 +24,10 @@ Simulation::Simulation()		//Constructor de Simulation.
 
 Simulation::~Simulation()	//Destructor
 {
+	delete this->grapher;
 }
 
-bool Simulation::initSim(int width, int height)	//Inicializa a los worms y al objeto gráfico.
+bool Simulation::initSim(int width, int height)	//Inicializa a los worms y al objeto grï¿½fico.
 {
 	int res = true;
 	for (int i = 0; i < wormNum; i++)
@@ -37,13 +38,13 @@ bool Simulation::initSim(int width, int height)	//Inicializa a los worms y al ob
 	}
 
 	grapher = new(nothrow) Graph(width, height);
+	grapher->init();
 	if (grapher == nullptr)
 		res = false;
 	if (grapher->getError())
 		res = false;
 
-
-
+	return res;
 }
 
 void Simulation::assignKeys(void)
@@ -63,7 +64,7 @@ void Simulation::assignKeys(void)
 //Setters
 void Simulation::setWormNum(int wormNum_)
 {
-	wormNum=wormNum_;
+	wormNum = wormNum_;
 }
 
 void Simulation::setWidth(int width_)
