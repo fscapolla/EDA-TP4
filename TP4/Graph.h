@@ -4,8 +4,8 @@
 #define BACKGROUND "Scenario.png"
 #define WALKINGFRAMES 15
 #define JUMPINGFRAMES 10
-#define DEFAULT_DISPLAY_WIDTH 700
-#define DEFAULT_DISPLAY_HEIGHT 700
+#define DEFAULT_DISPLAY_WIDTH 1920
+#define DEFAULT_DISPLAY_HEIGHT 696
 
 
 class Graph
@@ -29,13 +29,15 @@ public:
 
 	ALLEGRO_DISPLAY* getDisplay(void);
 
-	void test(unsigned int posX, unsigned int posY, unsigned int frame, char what);
+	void drawFrame(unsigned int posX, unsigned int posY, ALLEGRO_BITMAP** frames, unsigned int frame, int dir);
+
+	ALLEGRO_BITMAP* walkingFrames[WALKINGFRAMES];		//Imágenes de 'worm walk'.
+	ALLEGRO_BITMAP* jumpingFrames[JUMPINGFRAMES];		//Imágenes de 'worm jump'.
 
 private:
 	ALLEGRO_DISPLAY * display;							//Display.
 	ALLEGRO_BITMAP  * background;						//Imagen de fondo.
-	ALLEGRO_BITMAP * walkingFrames[WALKINGFRAMES];		//Imágenes de 'worm walk'.
-	ALLEGRO_BITMAP * jumpingFrames[JUMPINGFRAMES];		//Imágenes de 'worm jump'.
+
 
 	bool setAllegro(int width, int height, ALLEGRO_DISPLAY*& display);
 	bool setImages();

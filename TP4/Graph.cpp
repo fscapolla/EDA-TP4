@@ -82,8 +82,8 @@ bool Graph::setAllegro(int width, int height, ALLEGRO_DISPLAY*& display)
 bool Graph::setImages()
 {
 	bool res = true;
-	string walkingFile = "wwalk-F";
-	string jumpingFile = "wjump-F";
+	string walkingFile = "wwalking/wwalk-F";
+	string jumpingFile = "wjump/wjump-F";
 	string png = ".png";
 	string image;
 
@@ -117,13 +117,14 @@ ALLEGRO_DISPLAY* Graph::getDisplay(void) {
 	return this->display;
 }
 
-void Graph::test(unsigned int posX, unsigned int posY, unsigned int frame, char what) {
+void Graph::drawFrame(unsigned int posX, unsigned int posY, ALLEGRO_BITMAP** frames, unsigned int frame, int dir) {
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_set_target_backbuffer(getDisplay());
 	al_draw_bitmap(background, 0, 0, 0);
-	if(what=='W')
-		al_draw_bitmap(walkingFrames[frame], posX, posY, 0);
-	else
-		al_draw_bitmap(jumpingFrames[frame], posX, posY, 0);
+	int flag = 0;
+	if (dir == 1)
+		flag = ALLEGRO_FLIP_HORIZONTAL;
 
+	al_draw_bitmap(frames[frame], posX, posY, flag);
 }
+

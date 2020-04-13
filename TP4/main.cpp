@@ -51,21 +51,16 @@ int main(int argc, char *argv[])
 				// dispatcher->dispatchEvent(generator->nextEvent(), simPtr);	//Procede según el tipo de evento recibido
 
 				if (generator->getEvent() == ALLEGRO_EVENT_TIMER) {
-					
-					/* descomentar para ver test walk */
-					/*if (i >= 15) {
+					if (i >= 15) {
 						i = 0;
 					}
-					simPtr->grapher->test(400, 400, i, 'W');
-					*/
-					/* descomentar para ver test jump */
-					if (i >= 10) {
-						i = 0;
-						res = 0;
-						break;
-					}
-					simPtr->grapher->test(400, 400, i, 'J');
-					
+					simPtr->grapher->drawFrame(
+						1212, 
+						616, 
+						simPtr->grapher->walkingFrames,
+						1, 
+						-1
+					);
 					al_flip_display();
 					i++;
 				}
