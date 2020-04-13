@@ -2,6 +2,7 @@
 #include "Evento.h"
 #include <iostream>
 #include <allegro5/allegro.h>
+#define FPS 50
 
 #define FPS 50.0
 

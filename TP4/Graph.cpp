@@ -43,7 +43,7 @@ Graph::~Graph()
 	}
 }
 
-void Graph::update(Worm ** wormPtr, int wormNum)
+void Graph::updateGrapher(Worm ** wormPtr, int wormNum)
 {
 }
 
@@ -54,7 +54,7 @@ bool Graph::getError(void)
 
 
 
-//Inicializa Allegro, el display, y el complemento de imágenes.
+//Inicializa Allegro, el display, y el complemento de imï¿½genes.
 bool Graph::setAllegro(int width, int height, ALLEGRO_DISPLAY*& display)
 {
 	if (!al_init())										//Intenta inicializar Allegro
@@ -71,7 +71,7 @@ bool Graph::setAllegro(int width, int height, ALLEGRO_DISPLAY*& display)
 
 	if (!(al_init_image_addon()))			//Inicializa image addon.
 	{
-		cout << "No es posible inicializar el complemento de imágenes" << endl;
+		cout << "No es posible inicializar el complemento de imï¿½genes" << endl;
 		return false;
 	}
 	return true;

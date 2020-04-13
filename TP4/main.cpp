@@ -1,12 +1,7 @@
 #include <iostream>
 #include "EventGen.h"
 #include "Simulation.h"
-#include "Graph.h"
-#include "Dispatcher.h"
-#include "Worm.h"
 #include <ctime>
-#include <cstdlib>
-
 
 using namespace std;
 void dispatch(eventos eventNow, Simulation* simPtr);
@@ -35,10 +30,12 @@ int main(int argc, char* argv[]) {
 		cout << "No se pudo asignar memoria." << endl;
 		res = false;
 	}
+	
+	simPtr->assignKeys();	//Se asigna las teclas a cada worm.
 
 	if (res)
 	{
-		while (eventNow != QUIT)	//Si el evento no es de finalización de juego, éste continúa
+		while (eventNow != QUIT)	//Si el evento no es de finalizaciï¿½n de juego, ï¿½ste continï¿½a
 		{
 			eventNow = generator->nextEvent();
 

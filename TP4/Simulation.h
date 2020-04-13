@@ -1,6 +1,10 @@
 #pragma once
 #include "Worm.h"
 #include "Graph.h"
+#include "EventGen.h"
+#include "Worm.h"
+#include <allegro5/allegro_image.h>
+#include <allegro5/keyboard.h>
 
 
 class Simulation
@@ -10,6 +14,7 @@ public:
 	~Simulation();
 
 	bool initSim(int width, int height);
+	void assignKeys(void);
 
 	//Setters
 	void setWormNum(int wormNum_);

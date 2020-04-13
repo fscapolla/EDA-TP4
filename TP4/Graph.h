@@ -1,6 +1,7 @@
 #pragma once
 #include <allegro5/allegro.h>
 #include "Worm.h"
+#include <allegro5/keyboard.h>
 #define BACKGROUND "Scenario.png"
 #define WALKINGFRAMES 15
 #define JUMPINGFRAMES 10
@@ -24,6 +25,7 @@ public:
 
 	void update(Worm **wormPtr, int wormNum);	//Actualiza el display.
 
+
 	//Getters
 	bool getError(void);
 
@@ -31,8 +33,8 @@ public:
 
 	void drawFrame(unsigned int posX, unsigned int posY, ALLEGRO_BITMAP** frames, unsigned int frame, int dir);
 
-	ALLEGRO_BITMAP* walkingFrames[WALKINGFRAMES];		//Imágenes de 'worm walk'.
-	ALLEGRO_BITMAP* jumpingFrames[JUMPINGFRAMES];		//Imágenes de 'worm jump'.
+	ALLEGRO_BITMAP* walkingFrames[WALKINGFRAMES];		//Imï¿½genes de 'worm walk'.
+	ALLEGRO_BITMAP* jumpingFrames[JUMPINGFRAMES];		//Imï¿½genes de 'worm jump'.
 
 private:
 	ALLEGRO_DISPLAY * display;							//Display.
