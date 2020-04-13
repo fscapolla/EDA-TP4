@@ -21,7 +21,6 @@ Worm::Worm()	//Se inicializa el worm en reposo y mirando a la derecha por defect
 	jumpKey = NULL;
 	jumpingSpeed = JUMPINGSPEED;
 	walkingSpeed = WALKINGSPEED;
-
 }
 
 

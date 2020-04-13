@@ -30,7 +30,7 @@ Simulation::~Simulation()	//Destructor
 bool Simulation::initSim(int width, int height)	//Inicializa a los worms y al objeto gr�fico.
 {
 	int res = true;
-	for (int i = 0; i < wormNum; i++)
+	for (int i = 0; i < /*wormNum*/ 2; i++)
 	{
 		wormPtr[i] = new (nothrow) Worm();
 		if (wormPtr[i] == nullptr)

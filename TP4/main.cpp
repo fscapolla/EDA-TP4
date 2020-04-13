@@ -11,7 +11,9 @@ int main(int argc, char* argv[]) {
 	bool res = true;
 
 	Simulation* simPtr = new (nothrow) Simulation();
-	if (!(simPtr->initSim(X_DISPLAY, Y_DISPLAY)))
+	res = simPtr->initSim(X_DISPLAY, Y_DISPLAY);
+
+	if (!res)
 	{
 		cout << "No se pudo asignar memoria." << endl;
 		res = false;
@@ -20,7 +22,7 @@ int main(int argc, char* argv[]) {
 	srand(time(NULL));
 
 	// Se verifica que los objetos anteriores se hayan podido crear. 
-	EventGen* generator = new (nothrow) EventGen();
+	EventGen* generator = new (nothrow) EventGen(simPtr->grapher);
 
 
 

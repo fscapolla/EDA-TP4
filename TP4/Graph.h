@@ -33,6 +33,8 @@ public:
 
 	void drawFrame(unsigned int posX, unsigned int posY, ALLEGRO_BITMAP** frames, unsigned int frame, int dir);
 
+	ALLEGRO_BITMAP* getBackground(void);
+
 	ALLEGRO_BITMAP* walkingFrames[WALKINGFRAMES];		//Im�genes de 'worm walk'.
 	ALLEGRO_BITMAP* jumpingFrames[JUMPINGFRAMES];		//Im�genes de 'worm jump'.
 

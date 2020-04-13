@@ -43,9 +43,6 @@ Graph::~Graph()
 	}
 }
 
-void Graph::updateGrapher(Worm ** wormPtr, int wormNum)
-{
-}
 
 bool Graph::getError(void)
 {
@@ -116,9 +113,6 @@ ALLEGRO_DISPLAY* Graph::getDisplay(void) {
 }
 
 void Graph::drawFrame(unsigned int posX, unsigned int posY, ALLEGRO_BITMAP** frames, unsigned int frame, int dir) {
-	al_clear_to_color(al_map_rgb(0, 0, 0));
-	al_set_target_backbuffer(getDisplay());
-	al_draw_bitmap(background, 0, 0, 0);
 	int flag = 0;
 	if (dir == 1)
 		flag = ALLEGRO_FLIP_HORIZONTAL;
@@ -126,3 +120,6 @@ void Graph::drawFrame(unsigned int posX, unsigned int posY, ALLEGRO_BITMAP** fra
 	al_draw_bitmap(frames[frame], posX, posY, flag);
 }
 
+ALLEGRO_BITMAP* Graph::getBackground(void) {
+	return background;
+}

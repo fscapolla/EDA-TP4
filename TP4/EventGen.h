@@ -9,13 +9,12 @@ class EventGen
 {
 public:
 	EventGen();
+	
+	EventGen(Graph* graph= nullptr);
 
 	int nextEvent(void);	// Regresa si hay evento o no
 
-	//Getters
 	ALLEGRO_EVENT_QUEUE* getQueue(void);
-
-	// eventos getKey(ALLEGRO_EVENT* eventNow);
 
 	ALLEGRO_EVENT getAllegroEvent(void);
 
