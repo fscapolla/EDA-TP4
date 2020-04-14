@@ -5,8 +5,6 @@
 
 #define JUMPINGSPEED 4.5
 #define G 0.24	
-#define MAXWORMS 10
-#define PLAYERWORMS 2
 #define PI 3.14159265359
 #define ANGLE (PI/3)
 #define X_DISPLAY	1920
@@ -20,22 +18,13 @@
 #define CYCLEFRAMES 50
 #define IDLEFRAMES 4
 #define ONESTEP		9
-#define RESETCYCLE 3
-#define WALKINGSPEED 0,54	// Debe moverse 27 píxeles en 50 ciclos, de donde la velocidad es de 0,54 píxeles/ciclo.
 #define FIRSTFALLFRAME 5
 #define LASTFALLFRAME 10
-#define INITIALYSPEED -sin(ANGLE)*JUMPINGSPEED
-#define FALLFRAMES ((-1*INITIALYSPEED)/(0.5*G))
-#define ONEJUMP ((4.5)*cos(ANGLE))
 
 
 typedef enum {LEFT=-1, RIGHT=1} dir_n;
 typedef enum { BEGIN_MOVING, IDLE, MOVING, STOP_MOVING, BEGIN_JUMPING, JUMPING, LANDING } wormStates_n;
 typedef enum { KEY_DOWN, KEY_UP, REFRESH } wormEvents_n;
-
-
-
-
 
 class Worm
 {
@@ -61,7 +50,6 @@ public:
 	double getJumpingSpeed(void);
 	double getGravity(void);
 	double getAngle(void);
-	double getWalkingSpeed(void);
 	int getJumpKey(void);
 	int getLeftKey(void);
 	int getRightKey(void);
@@ -82,29 +70,20 @@ public:
 	void setWalkFrameCounter(int walkFrame);
 	void setJumpFrameCounter(int jumpFrame);
 
-private:	//Escribo todas las variables que se me ocurren pueden resultar útiles. Después vemos cuáles usamos.
-	bool isWalking, isJumping;
+private:
 	int jumpKey;
 	int leftKey;
 	int rightKey;
-	bool isRightKeyPressed;
-	bool isLeftKeyPressed;
 	dir_n direction;
-	unsigned int jumpDuration;
 	double x, y;
 	double g;
 	double angle;
 	double jumpingSpeed;
-	double walkingSpeed;
 	wormStates_n currentState;
 	int walkFrameCounter;
 	int jumpFrameCounter;
 	int preWalkFrameCounter;
 	int preJumpFrameCounter;
 	int frameCounter;
-	int cycleCounter;
-	double preX;
-	double preY;
-	double yspeed;
 };
 

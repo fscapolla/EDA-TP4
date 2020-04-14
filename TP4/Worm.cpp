@@ -7,8 +7,6 @@ Worm::Worm()	//Se inicializa el worm en reposo y mirando a la derecha por defect
 	currentState = IDLE;
 	angle = ANGLE;
 	g = G;
-	isJumping = false;
-	isWalking = false;
 	x = randBetweenReal((double)LEFT_EDGE, (double)RIGHT_EDGE);
 	y = FLOOR;
 	walkFrameCounter = 0;
@@ -16,14 +14,11 @@ Worm::Worm()	//Se inicializa el worm en reposo y mirando a la derecha por defect
 	preWalkFrameCounter = 0;
 	preJumpFrameCounter = 0;
 	frameCounter = 0;
-	cycleCounter = 0;
 	direction = RIGHT;
 	rightKey = NULL;
 	leftKey = NULL;
 	jumpKey = NULL;
-	yspeed = INITIALYSPEED;
 	jumpingSpeed = JUMPINGSPEED;
-	walkingSpeed = WALKINGSPEED;
 }
 
 
@@ -184,17 +179,18 @@ void Worm::wormFSM(int keyCode_, wormEvents_n eventType_)		//Analiza el estado a
 		case MOVING:
 			if (keyCode_ == rightKey || keyCode_ == leftKey)
 			{
-				if (walkFrameCounter <= FULLMOVEFRAME)		//Si está en la sección de warm up deja de moverse inmediatamente
-				{
-					currentState = IDLE;
-				}
-				if (walkFrameCounter >= FULLMOVEFRAME)		//si pasaron los 100 ms completa el ciclo y luego se detiene
-				{
-					currentState = BEGIN_MOVING;
-					frameCounter = 0;
-					preWalkFrameCounter = 0;
-				}
-				walkFrameCounter = 0;
+					if (walkFrameCounter <= FULLMOVEFRAME)		//Si está en la sección de warm up deja de moverse inmediatamente
+					{
+						currentState = IDLE;
+					}
+
+					if (walkFrameCounter >= FULLMOVEFRAME)		//si pasaron los 100 ms completa el ciclo y luego se detiene
+					{
+						currentState = BEGIN_MOVING;
+						frameCounter = 0;
+						preWalkFrameCounter = 0;
+					}
+					walkFrameCounter = 0;
 			}
 			break;
 
@@ -400,10 +396,6 @@ double Worm::getAngle(void)
 	return angle;
 }
 
-double Worm::getWalkingSpeed(void)
-{
-	return walkingSpeed;
-}
 
 int Worm::getJumpKey(void)
 {

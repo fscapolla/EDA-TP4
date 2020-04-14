@@ -15,7 +15,7 @@ using namespace std;
 Simulation::Simulation()		//Constructor de Simulation.
 {
 	Graph * grapher = nullptr;
-	 wormNum = PLAYERWORMS;
+	wormNum = NWORMS;
 	for (int i = 0; i < wormNum; i++)
 	{
 		wormPtr[i] = nullptr;
@@ -30,7 +30,7 @@ Simulation::~Simulation()	//Destructor
 bool Simulation::initSim(int width, int height)	//Inicializa a los worms y al objeto gr�fico.
 {
 	int res = true;
-	for (int i = 0; i < /*wormNum*/ 2; i++)
+	for (int i = 0; i < wormNum; i++)
 	{
 		wormPtr[i] = new (nothrow) Worm();
 		if (wormPtr[i] == nullptr)
@@ -43,6 +43,8 @@ bool Simulation::initSim(int width, int height)	//Inicializa a los worms y al ob
 		res = false;
 	if (grapher->getError())
 		res = false;
+	if (res)
+		assignKeys();
 
 	return res;
 }
@@ -50,7 +52,7 @@ bool Simulation::initSim(int width, int height)	//Inicializa a los worms y al ob
 void Simulation::assignKeys(void)
 {
 	int walkKeys[] = { P1_KEY_RIGHT,P1_KEY_LEFT,P2_KEY_RIGHT,P2_KEY_LEFT };
-	int jumpKeys[] = { P1_KEY_UP, NULL, P2_KEY_UP };;
+	int jumpKeys[] = { P1_KEY_UP, NULL, P2_KEY_UP };
 
 	wormPtr[0]->setWormKeys(P1_KEY_UP, P1_KEY_RIGHT, P1_KEY_LEFT);
 	wormPtr[1]->setWormKeys(P2_KEY_UP, P2_KEY_RIGHT, P2_KEY_LEFT);

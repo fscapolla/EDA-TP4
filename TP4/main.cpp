@@ -7,46 +7,36 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
-	// Se crean los objetos para manejar eventos.
 	bool res = true;
-
-	Simulation* simPtr = new (nothrow) Simulation();
-	res = simPtr->initSim(X_DISPLAY, Y_DISPLAY);
-
-	if (!res)
-	{
-		cout << "No se pudo asignar memoria." << endl;
-		res = false;
-	}
 
 	srand(time(NULL));
 
-	// Se verifica que los objetos anteriores se hayan podido crear. 
-	EventGen* generator = new (nothrow) EventGen(simPtr->grapher);
-
-
-
-	if ((simPtr == nullptr) || (generator == nullptr))
+	Simulation* simPtr = new (nothrow) Simulation();		//Simulation is initialized.
+	if (simPtr == nullptr)
+		res = false;
+	else res = simPtr->initSim(X_DISPLAY, Y_DISPLAY);			//Graphing requirements are initialized and worms are assigned their game keys.
+	EventGen* generator = new (nothrow) EventGen(simPtr->grapher);		//Event generator is created.
+	if (generator == nullptr)
+		res = false;
+															
+	if (!res)								//Assuming no errors, the game begins.
 	{
 		cout << "No se pudo asignar memoria." << endl;
-		res = false;
 	}
 	
-	simPtr->assignKeys();	//Se asigna las teclas a cada worm.
 
 	if (res)
 	{
-		while (generator->getAllegroEvent().type != ALLEGRO_EVENT_DISPLAY_CLOSE)	//Si el evento no es de finalizaci�n de juego, �ste contin�a
+		while (generator->getAllegroEvent().type != ALLEGRO_EVENT_DISPLAY_CLOSE)	//Checks whether the user wants to close the display or not.
 		{
 
-			if (generator->getAllegroEvent().type != ALLEGRO_EVENT_DISPLAY_CLOSE && generator->nextEvent())	//Revisa si hay eventos para atender.
+			if (generator->getAllegroEvent().type != ALLEGRO_EVENT_DISPLAY_CLOSE && generator->nextEvent())	//Checks if there are events in the queue
 			{
 				generator->dispatch(simPtr);
 				al_flip_display();
 			}
 		}
 	}
-
 	delete generator;
 	delete simPtr;
 

@@ -5,6 +5,7 @@
 #include <allegro5/keyboard.h>
 
 #define NWORMS 2
+#define MAXWORMS 14
 
 class Simulation
 {
