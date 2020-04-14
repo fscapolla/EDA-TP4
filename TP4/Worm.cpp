@@ -66,7 +66,7 @@ void Worm::wormJump(void)
 		direction=RIGHT;
 	}
 	
-	y = FLOOR - jumpingSpeed*sin(angle)*jumpFrameCounter + 0.5*g*jumpFrameCounter*jumpFrameCounter;
+	y = FLOOR - jumpingSpeed*sin(angle)*jumpFrameCounter + 0.5*g*pow(jumpFrameCounter,2);
 }
 
 
@@ -79,19 +79,21 @@ void Worm::setWormKeys(int jumpKey_, int rightKey_, int leftKey_)
 
 
 
-void Worm::wormFSM(int keyCode_, wormEvents_n eventType_)		//Analiza el estado actual del worm y procede acorde. Actúa cuando llega un evento de tipo key_Down
+void Worm::wormFSM(int keyCode_, wormEvents_n eventType_)		//Recibe un evento y según el estado actual y el evento recibido procede acorde.
 {
 	if (eventType_ == KEY_DOWN) {
+
 		if (keyCode_ == rightKey)
 			isRightKeyPressed = true;
 		else if (keyCode_ == leftKey)
 			isLeftKeyPressed = true;
 		else if (keyCode_ == jumpKey)
 			isJumpKeyPressed = true;
+
 		switch (currentState)
 		{
 		case IDLE:
-			if (keyCode_ == jumpKey)
+			if (keyCode_ == jumpKey)		
 			{
 				currentState = BEGIN_JUMPING;
 				frameCounter = 0;
@@ -168,42 +170,7 @@ void Worm::wormFSM(int keyCode_, wormEvents_n eventType_)		//Analiza el estado a
 			break;
 
 		case LANDING:
-			if (frameCounter >= FIRSTFALLFRAME && frameCounter <= LASTFALLFRAME) //Mientras está descendiendo no se modifica el estado.
-			{
-			}
-			else
-			{
-				if (isJumpKeyPressed)
-				{
-					currentState = BEGIN_JUMPING;
-					frameCounter = 0;
-					jumpWarmUp();
-				}
-
-				else if (isRightKeyPressed)
-				{
-					currentState = BEGIN_MOVING;
-					direction = RIGHT;
-					preWalkFrameCounter = 0;
-					frameCounter = 0;
-				}
-				else if (isLeftKeyPressed)
-				{
-					currentState = BEGIN_MOVING;
-					direction = LEFT;
-					preJumpFrameCounter = 0;
-					frameCounter = 0;
-				}
-				else
-				{
-					currentState = IDLE;		//Worm has landed.
-					frameCounter = 0;
-					isJumpKeyPressed = 0;
-					isLeftKeyPressed = 0;
-					isJumpKeyPressed = 0;
-					y = FLOOR;
-				}
-			}
+			wormLanding();
 			break;
 
 		default:
@@ -212,20 +179,22 @@ void Worm::wormFSM(int keyCode_, wormEvents_n eventType_)		//Analiza el estado a
 	}
 
 	if (eventType_ == KEY_UP) {
+
 		if (keyCode_ == rightKey)
 			isRightKeyPressed = false;
 		else if (keyCode_ == leftKey)
 			isLeftKeyPressed = false;
 		else if (keyCode_ == jumpKey)
 			isJumpKeyPressed = false;
+
 		switch (currentState)
 		{
 		case MOVING:
-			if (keyCode_ == rightKey || keyCode_ == leftKey)
+			if (keyCode_ == rightKey || keyCode_ == leftKey)		//El worm no debe detenerse si la tecla que se suelta no corresponde a la que indica su movimiento.
 			{
 				if(direction==RIGHT && isRightKeyPressed==false || direction==LEFT && isLeftKeyPressed==false)
 				{
-					if (!isRightKeyPressed && !isLeftKeyPressed)
+					if (!isRightKeyPressed && !isLeftKeyPressed)	//Sólo se detiene si se dejan de apretar las dos teclas de movimiento horizontal
 					{
 						currentState = IDLE;
 						frameCounter = 0;
@@ -239,7 +208,6 @@ void Worm::wormFSM(int keyCode_, wormEvents_n eventType_)		//Analiza el estado a
 						walkFrameCounter = 0;
 					}
 					else if (isRightKeyPressed)
-
 					{
 						currentState = BEGIN_MOVING;
 						direction = RIGHT;
@@ -251,12 +219,12 @@ void Worm::wormFSM(int keyCode_, wormEvents_n eventType_)		//Analiza el estado a
 				else
 				{
 
-					if (walkFrameCounter <= FULLMOVEFRAME)		//Si está en la sección de warm up deja de moverse inmediatamente
+					if (walkFrameCounter <= FULLMOVEFRAME)		//Si está en la sección de warm up deja de moverse inmediatamente.
 					{
 						if (!isRightKeyPressed && !isLeftKeyPressed)
 							currentState = IDLE;
 					}
-					if (walkFrameCounter >= FULLMOVEFRAME)		//si pasaron los 100 ms completa el ciclo y luego se detiene
+					if (walkFrameCounter >= FULLMOVEFRAME)		//si pasaron los 100 ms completa el ciclo y luego se detiene.
 					{
 						{
 							currentState = BEGIN_MOVING;
@@ -274,7 +242,7 @@ void Worm::wormFSM(int keyCode_, wormEvents_n eventType_)		//Analiza el estado a
 			{
 				preWalkFrameCounter = 0;
 				currentState = IDLE;
-				turnWorm(keyCode_);	//Revisa si es necesario cambiar la dirección de worm.
+				turnWorm(keyCode_);				//Revisa si es necesario cambiar la dirección de worm.
 			}
 			break;
 
@@ -323,43 +291,9 @@ void Worm::wormFSM(int keyCode_, wormEvents_n eventType_)		//Analiza el estado a
 				y = FLOOR;
 			}
 			break;
+
 		case LANDING:
-			if (frameCounter >= FIRSTFALLFRAME && frameCounter <= LASTFALLFRAME) //Mientras está descendiendo no se modifica el estado.
-			{
-			}
-			else {
-
-				if (isJumpKeyPressed)
-				{
-					currentState = BEGIN_JUMPING;
-					frameCounter = 0;
-					jumpWarmUp();
-				}
-
-				else if (isRightKeyPressed)
-				{
-					currentState = BEGIN_MOVING;
-					direction = RIGHT;
-					preWalkFrameCounter = 0;
-					frameCounter = 0;
-				}
-				else if (isLeftKeyPressed)
-				{
-					currentState = BEGIN_MOVING;
-					direction = LEFT;
-					preJumpFrameCounter = 0;
-					frameCounter = 0;
-				}
-				else
-				{
-					currentState = IDLE;		//Worm has landed.
-					frameCounter = 0;
-					isJumpKeyPressed = 0;
-					isLeftKeyPressed = 0;
-					isJumpKeyPressed = 0;
-					y = FLOOR;
-				}
-			}
+			wormLanding();
 			break;
 
 		default:
@@ -371,13 +305,55 @@ void Worm::wormFSM(int keyCode_, wormEvents_n eventType_)		//Analiza el estado a
 
 	void Worm::jumpWarmUp(void)		//Lleva a cabo el las animaciones de warm up antes del salto.
 	{
+
 		if (frameCounter >= 0 && frameCounter <= IDLEFRAMES)	//Warmup.
+		{
+		}
+
+		else
+		{
+			jumpFrameCounter = 0;
+			currentState = JUMPING;		//Una vez que finalizó el warm up comienza a moverse.
+		}
+	}
+
+	void Worm::wormLanding()
+	{
+
+		if (frameCounter >= FIRSTFALLFRAME && frameCounter <= LASTFALLFRAME) //Mientras está descendiendo no se modifica el estado.
 		{
 		}
 		else
 		{
-			jumpFrameCounter = 0;
-				currentState = JUMPING;		//Una vez que finalizó el warm up comienza a moverse.
+			if (isJumpKeyPressed)
+			{
+				currentState = BEGIN_JUMPING;
+				frameCounter = 0;
+				jumpWarmUp();
+			}
+
+			else if (isRightKeyPressed)
+			{
+				currentState = BEGIN_MOVING;
+				direction = RIGHT;
+				preWalkFrameCounter = 0;
+				frameCounter = 0;
+			}
+			else if (isLeftKeyPressed)
+			{
+				currentState = BEGIN_MOVING;
+				direction = LEFT;
+				preJumpFrameCounter = 0;
+				frameCounter = 0;
+			}
+			else
+			{
+				currentState = IDLE;		//Worm has landed.
+				frameCounter = 0;
+				isJumpKeyPressed = 0;
+				isLeftKeyPressed = 0;
+				isJumpKeyPressed = 0;
+			}
 		}
 	}
 

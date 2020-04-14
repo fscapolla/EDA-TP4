@@ -39,6 +39,7 @@ public:
 	void setWormKeys(int jumpKey_, int rightKey_, int leftKey_);
 	void wormFSM(int keyCode_, wormEvents_n eventType_);
 	void jumpWarmUp(void);
+	void wormLanding();
 	void turnWorm(int keyCode_);
 	void updateWorm(void);
 
