@@ -85,5 +85,7 @@ private:
 	int preWalkFrameCounter;
 	int preJumpFrameCounter;
 	int frameCounter;
+	bool isRightKeyPressed;
+	bool isLeftKeyPressed;
 };
 
