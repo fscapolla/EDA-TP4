@@ -31,6 +31,9 @@ Graph::~Graph()
 		al_destroy_display(display);
 	if (background)
 		al_destroy_bitmap(background);
+
+	al_shutdown_image_addon();
+	
 	for(int i=0; i < WALKINGFRAMES; i++) {
 		if (walkingFrames[i]) {
 			al_destroy_bitmap(walkingFrames[i]);
