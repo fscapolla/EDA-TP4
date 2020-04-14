@@ -87,5 +87,6 @@ private:
 	int frameCounter;
 	bool isRightKeyPressed;
 	bool isLeftKeyPressed;
+	bool isJumpKeyPressed;
 };
 
