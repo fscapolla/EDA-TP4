@@ -25,7 +25,7 @@ public:
 
 	void update(Worm **wormPtr, int wormNum);	//Actualiza el display.
 
-
+	void clearDisplay(void);
 	//Getters
 	bool getError(void);
 

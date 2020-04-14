@@ -18,8 +18,6 @@ Worm::Worm()	//Se inicializa el worm en reposo y mirando a la derecha por defect
 	rightKey = NULL;
 	leftKey = NULL;
 	jumpKey = NULL;
-	isRightKeyPressed = false;
-	isLeftKeyPressed = false;
 	jumpingSpeed = JUMPINGSPEED;
 }
 
@@ -95,12 +93,10 @@ void Worm::wormFSM(int keyCode_, wormEvents_n eventType_)		//Analiza el estado a
 				if (keyCode_ == rightKey)
 				{
 					direction = RIGHT;
-					isRightKeyPressed = true;
 				}
 				else if(keyCode_==leftKey)
 				{
 					direction = LEFT;
-					isLeftKeyPressed = true;
 				}
 				preWalkFrameCounter = 0;
 				frameCounter = 0;
@@ -187,8 +183,6 @@ void Worm::wormFSM(int keyCode_, wormEvents_n eventType_)		//Analiza el estado a
 					if (walkFrameCounter <= FULLMOVEFRAME)		//Si está en la sección de warm up deja de moverse inmediatamente
 					{
 						currentState = IDLE;
-						isRightKeyPressed = false;
-						isLeftKeyPressed = false;
 					}
 					if (walkFrameCounter >= FULLMOVEFRAME)		//si pasaron los 100 ms completa el ciclo y luego se detiene
 					{

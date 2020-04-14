@@ -17,9 +17,7 @@ Simulation::Simulation()		//Constructor de Simulation.
 	Graph * grapher = nullptr;
 	wormNum = NWORMS;
 	for (int i = 0; i < wormNum; i++)
-	{
 		wormPtr[i] = nullptr;
-	}
 }
 
 Simulation::~Simulation()	//Destructor
@@ -76,10 +74,49 @@ void Simulation::stopWorm(int keyCode_)
 
 void Simulation::refresh_worm(int keyCode_)
 {
+
+	grapher->clearDisplay();
+
 	for (int i = 0; i < wormNum; i++)
 	{
 		wormPtr[i]->updateWorm();
 		wormPtr[i]->wormFSM(keyCode_, REFRESH);
+	}
+
+	for (int i = 0; i < wormNum; i++) {
+		if (
+			wormPtr[i]->getState() == BEGIN_MOVING ||
+			wormPtr[i]->getState() == MOVING ||
+			wormPtr[i]->getState() == IDLE
+			)
+			grapher->drawFrame(
+				wormPtr[i]->getX(),
+				wormPtr[i]->getY(),
+				grapher->walkingFrames,
+				wormPtr[i]->getFrameCounter(),
+				wormPtr[i]->getDirection()
+			);
+
+		else if (
+			wormPtr[i]->getState() == BEGIN_JUMPING ||
+			wormPtr[i]->getState() == LANDING
+			)
+			grapher->drawFrame(
+				wormPtr[i]->getX(),
+				wormPtr[i]->getY(),
+				grapher->jumpingFrames,
+				wormPtr[i]->getFrameCounter() % 10,
+				wormPtr[i]->getDirection()
+			);
+
+		else if (wormPtr[i]->getState() == JUMPING)
+			grapher->drawFrame(
+				wormPtr[i]->getX(),
+				wormPtr[i]->getY(),
+				grapher->jumpingFrames,
+				5,
+				wormPtr[i]->getDirection()
+			);
 	}
 }
 

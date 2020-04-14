@@ -51,26 +51,29 @@ bool Graph::getError(void)
 
 
 
-//Inicializa Allegro, el display, y el complemento de im�genes.
+/* Inicializa Allegro, el display, y el complemento de im�genes. */
 bool Graph::setAllegro(int width, int height, ALLEGRO_DISPLAY*& display)
 {
-	if (!al_init())										//Intenta inicializar Allegro
+	/* Intenta inicializar Allegro */
+	if (!al_init())
 	{
 		cout << "No es posible inicializar Allegro." << endl;
 		return false;
 	}
+
 	display = al_create_display(width, height);
-	if (!display)		//Crea display.
+	if (!display)
 	{
 		cout << "No es posible inicializar el display." << endl;
 		return false;
 	}
 
-	if (!(al_init_image_addon()))			//Inicializa image addon.
+	if (!(al_init_image_addon()))
 	{
 		cout << "No es posible inicializar el complemento de im�genes" << endl;
 		return false;
 	}
+
 	return true;
 }
 
@@ -84,26 +87,31 @@ bool Graph::setImages()
 
 	for (int i = 1; i <= WALKINGFRAMES; i++)
 	{
-		image = walkingFile + to_string(i) + png;				//Se forma el path correspondiente a cada imagen.
-		walkingFrames[i - 1] = al_load_bitmap(image.c_str());		//Se carga cada imagen
-		if (!walkingFrames[i - 1])										//Chequea error
+		/* Formo path correspondiente a cada img */
+		image = walkingFile + to_string(i) + png;
+		/* Cargo img */
+		walkingFrames[i - 1] = al_load_bitmap(image.c_str());
+		if (!walkingFrames[i - 1])
 			return false;
 	}
 
 	for (int j = 1; j <= JUMPINGFRAMES; j++)
 	{
-		image = jumpingFile + to_string(j) + png;					//Se forma el path correspondiente a cada imagen.
-		jumpingFrames[j - 1] = al_load_bitmap(image.c_str());	//Se carga cada imagen
-		if (!jumpingFrames[j - 1])										//Chequea error
+		/* Formo path correspondiente a cada img */
+		image = jumpingFile + to_string(j) + png;
+		/* Cargo img */
+		jumpingFrames[j - 1] = al_load_bitmap(image.c_str());
+		if (!jumpingFrames[j - 1])
 			return false;
 	}
 
-
-	background = al_load_bitmap("Scenario.png");	//Se carga el fondo
-	if (!background)								//Chequea error
+	/* Cargo el fondo */
+	background = al_load_bitmap("Scenario.png");
+	if (!background)
 		return false;
 
-	al_draw_bitmap(background, 0, 0, 0);			//Se dibuja el fondo.
+	/* Dibujo el fondo */
+	al_draw_bitmap(background, 0, 0, 0);
 
 	return true;
 }
@@ -118,9 +126,14 @@ void Graph::drawFrame(unsigned int posX, unsigned int posY, ALLEGRO_BITMAP** fra
 		flag = ALLEGRO_FLIP_HORIZONTAL;
 
 	al_draw_bitmap(frames[frame], posX, posY, flag);
-	cout << frame << endl;
 }
 
 ALLEGRO_BITMAP* Graph::getBackground(void) {
 	return background;
+}
+
+void Graph::clearDisplay(void) {
+	al_clear_to_color(al_map_rgb(0, 0, 0));
+	al_set_target_backbuffer(display);
+	al_draw_bitmap(background, 0, 0, 0);
 }
